@@ -12,11 +12,11 @@ public enum Hauteur {
             case AS:
                 return "A";
             case ROI:
-                return "R";
+                return "K";
             case DAME:
-                return "D";
+                return "Q";
             case VALET:
-                return "V";
+                return "J";
             default:
                 throw new IllegalArgumentException();
         }
