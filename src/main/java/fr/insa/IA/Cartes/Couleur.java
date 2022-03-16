@@ -4,6 +4,9 @@ public enum Couleur {
     CARREAU,
     PIQUE;
 
+    /**
+     * @return retourne le caractère associé à la couleur pour plus d'esthetisme
+     */
     @Override
     public String toString() {
         switch (this) {

@@ -25,14 +25,30 @@ public class Player {
         nbPlayer++;
     }
 
+    
+    /** 
+     * Retourne l'id du joueur
+     * @return int
+     */
     public int getId() {
         return id;
     }
 
+    
+    /** 
+     * retourne le nombre de joueur
+     * @return int
+     */
     public int getNbPlayer() {
         return nbPlayer;
     }
 
+    
+    /** 
+     * Supprime une carte du jeu d'un joueur et la retourne
+     * @param c Carte à supprimer
+     * @return Carte supprimée
+     */
     public Carte removeCarte(Carte c) {
         if (hand.contains(c)) {
             hand.remove(c);
@@ -47,6 +63,7 @@ public class Player {
     }
 
     /**
+     * Retourne les cartes dans la main du joueur
      * @return List<Carte> return the hand
      */
     public List<Carte> getHand() {
@@ -54,6 +71,7 @@ public class Player {
     }
 
     /**
+     * Ajoute une carte à la main du joueur
      * @param hand the hand to set
      */
     public void addHand (Carte c) {
@@ -61,6 +79,7 @@ public class Player {
     }
 
     /**
+     * Retourne les cartes face visible du joueur
      * @return List<Carte> return the table
      */
     public List<Carte> getTable() {
@@ -68,6 +87,7 @@ public class Player {
     }
 
     /**
+     * Ajoute une carte face visible au joueur
      * @param table the table to set
      */
     public void addTable (Carte c) {
@@ -75,6 +95,7 @@ public class Player {
     }
 
     /**
+     * Retourne les cartes face cachée du joueur
      * @return List<Carte> return the secret
      */
     public List<Carte> getSecret() {
@@ -82,6 +103,7 @@ public class Player {
     }
 
     /**
+     * Ajoute une carte face cachée au joueur
      * @param secret the secret to set
      */
     public void addSecret (Carte c) {
@@ -89,14 +111,14 @@ public class Player {
     }
 
     /**
-     * @return int return the score
+     * @return int retourne le score
      */
     public int getScore() {
         return score;
     }
 
     /**
-     * @param score the score to set
+     * @param score set le score du joueur
      */
     public void setScore(int score) {
         this.score = score;

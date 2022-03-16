@@ -10,18 +10,30 @@ public class Carte implements Comparable<Carte> {
     
     private Hauteur hauteur;
     private Couleur couleur;
-
+    
+    /**
+     * @param h hauteur de la carte (voir enum HAUTEUR)
+     * @param c couleur de la carte (voir enum COULEUR)
+     */
     public Carte(Hauteur h, Couleur c) {
         couleur = c;
         hauteur = h;
     }
 
+    /**
+     * @param arg0 est la carte à comparer à l'objet courant
+     * @return retourne un entier <0 si l'objet courant est inférieur à arg0 (objet en paramètre) et >0 si c'est l'inverse
+     */
     @Override
     public int compareTo(Carte arg0) {
         // Pas d'atout pour l'instant
         return this.hauteur.ordinal() - arg0.hauteur.ordinal();
     }
 
+    /**
+     * C'est plutot un print qu'un toString
+     * @return retourne null quoi qu'il arrive
+     */
     public String toString() {
         Set<Carte> ens = new HashSet<>();
         ens.add(this);

@@ -21,17 +21,25 @@ public class Deck {
         this.shuffleDeck();
     }
 
+    /**
+     * Mélange le deck
+     */
     public void shuffleDeck() {
         Collections.shuffle(deck);
     }
 
     /**
-     * @return ArrayList<Carte> return the deck
+     * @return le deck avec une ArrayList<Carte>
      */
     public List<Carte> getDeck() {
         return deck;
     }
 
+    
+    /** 
+     * retourne la première carte du deck et la supprime du deck
+     * @return une Carte
+     */
     public Carte pop() {
         if (deck.isEmpty()) {
             throw new IndexOutOfBoundsException();
@@ -41,6 +49,11 @@ public class Deck {
         return c;
     }
 
+    
+    /** 
+     * Distribue à chaque joueur le bon nombre de carte (défini dans les statics de la classe Player)
+     * @param players la liste des joueurs
+     */
     public void deal(List<Player> players) {
         for (Player p : players) {
             for (int i = 0; i < Player.HAND_SIZE; i++) {

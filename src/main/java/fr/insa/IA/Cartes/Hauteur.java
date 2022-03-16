@@ -6,6 +6,9 @@ public enum Hauteur {
     DAME,
     VALET;
 
+    /**
+     * @return retourne le caractère associé à la couleur pour plus d'esthetisme
+     */
     @Override
     public String toString() {
         switch (this) {
