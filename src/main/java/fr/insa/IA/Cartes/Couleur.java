@@ -1,15 +1,15 @@
 package fr.insa.IA.Cartes;
 
 public enum Couleur {
-    Carreau,
-    Pique;
+    CARREAU,
+    PIQUE;
 
     @Override
     public String toString() {
         switch (this) {
-            case Carreau:
+            case CARREAU:
                 return "\u2666";
-            case Pique:
+            case PIQUE:
                 return "\u2660";
             default:
                 throw new IllegalArgumentException();
