@@ -9,6 +9,8 @@ import fr.insa.IA.Player.Player;
 
 
 public class App {
+    
+
     public static void main( String[] args )
     {
         Player p1 = new Player(); 

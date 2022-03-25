@@ -65,6 +65,15 @@ public class Carte implements Comparable<Carte> {
     }
 
 
+    public Hauteur getHauteur() {
+        return this.hauteur;
+    }
+
+    public Couleur getCouleur() {
+        return this.couleur;
+    }
+
+
     /*
     public static void main(String[] args) {
         Carte c1 = new Carte(Hauteur.A, Couleur.Pique);
