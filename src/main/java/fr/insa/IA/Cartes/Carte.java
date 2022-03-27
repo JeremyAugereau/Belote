@@ -27,7 +27,7 @@ public class Carte implements Comparable<Carte> {
     @Override
     public int compareTo(Carte arg0) {
         // Pas d'atout pour l'instant
-        return this.hauteur.ordinal() - arg0.hauteur.ordinal();
+        return this.hauteur.toScore() - arg0.hauteur.toScore();
     }
 
     /**

@@ -24,4 +24,20 @@ public enum Hauteur {
                 throw new IllegalArgumentException();
         }
     }
+
+
+    public int toScore() {
+        switch (this) {
+            case AS:
+                return 11;
+            case ROI:
+                return 4;
+            case DAME:
+                return 3;
+            case VALET:
+                return 2;
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
 }

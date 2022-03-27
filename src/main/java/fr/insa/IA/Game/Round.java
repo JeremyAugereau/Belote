@@ -2,10 +2,10 @@ package fr.insa.IA.Game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import fr.insa.IA.Cartes.Carte;
 import fr.insa.IA.Cartes.Couleur;
-import fr.insa.IA.Cartes.Hauteur;
 import fr.insa.IA.Player.Player;
 
 /**
@@ -13,7 +13,7 @@ import fr.insa.IA.Player.Player;
  */
 public class Round {
 
-    private class Coup {
+    public class Coup {
         Player player;
         Carte carte;
 
@@ -33,18 +33,33 @@ public class Round {
         pli = new ArrayList<>();
     }
 
-    public Player roundProceed(){
+    public Player roundProceed(Game game){
         Player roundWinner;
         for(int i = players.indexOf(currentPlayer); i<players.indexOf(currentPlayer)+players.size();i++){
             actionProceed(players.get(i%players.size()));
         }
         roundWinner = getRoundWinner();
         roundWinner.setScore(roundWinner.getScore()+getRoundValue());
+        game.addPli(pli);
         return roundWinner;
     }
 
     public void actionProceed(Player player){
-        
+        System.out.println("Pli en cours :");
+        List<Carte> carteToPrint = new ArrayList<>();
+        for(Coup coup : pli){
+            carteToPrint.add(coup.carte);
+        }
+        Carte.printCards(carteToPrint);
+
+        System.out.println("Tu peux jouer :");
+        Carte.printCards(getPlayableCard(player));
+        System.out.println("Entre le numero de ta carte : ");
+        Scanner input = new Scanner(System.in);
+        int nb = Integer.parseInt(input.nextLine());
+        Carte cartePlayed = getPlayableCard(player).get(nb);
+        pli.add(new Coup(player, cartePlayed));
+        player.removeCarte(cartePlayed);
     }
 
     public List<Carte> getPlayableCard(Player player){
@@ -85,8 +100,9 @@ public class Round {
     public int getRoundValue(){
         int score = 0;
         for(Coup coup : pli){
-            score += coup.carte.getHauteur().ordinal();
+            score += coup.carte.getHauteur().toScore();
         }
         return score;
     }
+
 }

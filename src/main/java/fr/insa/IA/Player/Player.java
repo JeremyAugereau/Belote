@@ -25,27 +25,27 @@ public class Player {
         nbPlayer++;
     }
 
-    
-    /** 
+    /**
      * Retourne l'id du joueur
+     * 
      * @return int
      */
     public int getId() {
         return id;
     }
 
-    
-    /** 
+    /**
      * retourne le nombre de joueur
+     * 
      * @return int
      */
     public int getNbPlayer() {
         return nbPlayer;
     }
 
-    
-    /** 
+    /**
      * Supprime une carte du jeu d'un joueur et la retourne
+     * 
      * @param c Carte à supprimer
      * @return Carte supprimée
      */
@@ -62,8 +62,20 @@ public class Player {
         return c;
     }
 
+    public int nbCartes() {
+        int tableSize = 0;
+        for (int i = 0; i < table.size(); i++) {
+            if (table.get(i) != null) {
+                tableSize++;
+            }
+        }
+
+        return hand.size() + tableSize;
+    }
+
     /**
      * Retourne les cartes dans la main du joueur
+     * 
      * @return List<Carte> return the hand
      */
     public List<Carte> getHand() {
@@ -72,14 +84,16 @@ public class Player {
 
     /**
      * Ajoute une carte à la main du joueur
+     * 
      * @param hand the hand to set
      */
-    public void addHand (Carte c) {
+    public void addHand(Carte c) {
         hand.add(c);
     }
 
     /**
      * Retourne les cartes face visible du joueur
+     * 
      * @return List<Carte> return the table
      */
     public List<Carte> getTable() {
@@ -88,14 +102,16 @@ public class Player {
 
     /**
      * Ajoute une carte face visible au joueur
+     * 
      * @param table the table to set
      */
-    public void addTable (Carte c) {
+    public void addTable(Carte c) {
         table.add(c);
     }
 
     /**
      * Retourne les cartes face cachée du joueur
+     * 
      * @return List<Carte> return the secret
      */
     public List<Carte> getSecret() {
@@ -104,9 +120,10 @@ public class Player {
 
     /**
      * Ajoute une carte face cachée au joueur
+     * 
      * @param secret the secret to set
      */
-    public void addSecret (Carte c) {
+    public void addSecret(Carte c) {
         secret.add(c);
     }
 
