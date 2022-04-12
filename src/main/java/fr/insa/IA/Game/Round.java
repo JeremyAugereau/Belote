@@ -23,24 +23,26 @@ public class Round {
         }
     }
 
+    private Player firstPlayer;
     private Player currentPlayer;
     private List<Player> players;
     private List<Coup> pli;
 
     public Round(List<Player> plist,Player player) {
         players = plist;
-        currentPlayer = player;
+        firstPlayer = player;
         pli = new ArrayList<>();
     }
 
     public Player roundProceed(Game game){
         Player roundWinner;
-        for(int i = players.indexOf(currentPlayer); i<players.indexOf(currentPlayer)+players.size();i++){
-            actionProceed(players.get(i%players.size()));
+        for(int i = players.indexOf(firstPlayer); i<players.indexOf(firstPlayer)+players.size();i++){
+            currentPlayer = players.get(i%players.size());
+            actionProceed(currentPlayer);
         }
         roundWinner = getRoundWinner();
         roundWinner.setScore(roundWinner.getScore()+getRoundValue());
-        game.addPli(pli);
+        game.addRound(this);
         return roundWinner;
     }
 
@@ -103,6 +105,10 @@ public class Round {
             score += coup.carte.getHauteur().toScore();
         }
         return score;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
 }

@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.insa.IA.Cartes.Deck;
-import fr.insa.IA.Game.Round.Coup;
 import fr.insa.IA.Player.Player;
 
 public class Game {
     private List<Player> players;
     private Deck deck;
-    private List<List<Coup>> plis;
+    private List<Round> rounds;
+    private Round currentRound;
 
     public Game(int nbPlayer){
         players = new ArrayList<>();
         for (int i = 0 ; i< nbPlayer ; i++) {
             players.add(new Player());
         }
-        plis = new ArrayList<>();
+        rounds = new ArrayList<>();
         deck = new Deck();
         deck.deal(players);
     }
@@ -25,8 +25,8 @@ public class Game {
     public void proceedGame(){
         Player currentPlayer = players.get(0);
         while(players.get(0).nbCartes() !=0) {
-            Round round = new Round(players, currentPlayer);
-            currentPlayer = round.roundProceed(this);
+            currentRound = new Round(players, currentPlayer);
+            currentPlayer = currentRound.roundProceed(this);
         }
         Player winner = players.get(0);
         for (Player p : players) {
@@ -37,7 +37,15 @@ public class Game {
         System.out.println("Player " + winner.getId() + " a gagné !!!!!!");
     }
 
-    public void addPli(List<Coup> pli){
-        plis.add(pli);
+    public void addRound(Round round){
+        rounds.add(round);
+    }
+
+    public Round getCurrentRound() {
+        return currentRound;
+    }
+
+    public Deck getDeck() {
+        return deck;
     }
 }

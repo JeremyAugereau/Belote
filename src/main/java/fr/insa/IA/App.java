@@ -42,7 +42,7 @@ public class App {
         // System.out.println("P1 score : " + p1.getScore());
         // System.out.println("P2 score : " + p2.getScore());
 
-        Game game  = new Game(0);
+        Game game  = new Game(2);
         game.proceedGame();
 
     }

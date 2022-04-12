@@ -9,15 +9,17 @@ import fr.insa.IA.Player.Player;
 public class Deck {
 
     private List<Carte> deck;
+    private int deckSize;
 
     public Deck() {
+        deckSize = 0;
         deck = new ArrayList<>();
         for (Couleur C : Couleur.values()) {
             for (Hauteur H : Hauteur.values()) {
                 deck.add(new Carte(H, C));
+                deckSize++;
             }
         }
-
         this.shuffleDeck();
     }
 
@@ -35,9 +37,9 @@ public class Deck {
         return deck;
     }
 
-    
-    /** 
+    /**
      * retourne la première carte du deck et la supprime du deck
+     * 
      * @return une Carte
      */
     public Carte pop() {
@@ -49,9 +51,10 @@ public class Deck {
         return c;
     }
 
-    
-    /** 
-     * Distribue à chaque joueur le bon nombre de carte (défini dans les statics de la classe Player)
+    /**
+     * Distribue à chaque joueur le bon nombre de carte (défini dans les statics de
+     * la classe Player)
+     * 
      * @param players la liste des joueurs
      */
     public void deal(List<Player> players) {
@@ -66,6 +69,10 @@ public class Deck {
                 p.addSecret(this.pop());
             }
         }
+    }
+
+    public int getDeckSize() {
+        return deckSize;
     }
 
 }
