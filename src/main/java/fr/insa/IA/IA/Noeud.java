@@ -5,6 +5,8 @@ import java.util.List;
 
 import fr.insa.IA.Cartes.Carte;
 import fr.insa.IA.Game.Game;
+import fr.insa.IA.Game.Round.Coup;
+import fr.insa.IA.Player.Player;
 
 public class Noeud {
 
@@ -12,17 +14,62 @@ public class Noeud {
     private List<Double> strategy;
     private List<Double> sumStrategy;
     private Game game;
-    private String infoSet;
+    private InfoSet infoSet;
     private final int NUM_ACTION;
 
+    private class InfoSet {
+        private List<Carte> history;
+        private List<Carte> hand;
+        private List<Carte> table;
+        private List<Carte> enemyTable;
+
+        public InfoSet() {
+            history = new ArrayList<>();
+            hand = new ArrayList<>();
+            table = new ArrayList<>();
+            enemyTable = new ArrayList<>();
+        }
+
+        public InfoSet(List<Carte> table, List<Carte> enemyTable, List<Carte> history, List<Carte> hand) {
+            this.history = history;
+            this.hand = hand;
+            this.table = table;
+            this.enemyTable = enemyTable;
+        }
+
+        public List<Carte> getHand() {
+            return hand;
+        }
+
+        public List<Carte> getEnemyTable() {
+            return enemyTable;
+        }
+
+        public List<Carte> getHistory() {
+            return history;
+        }
+
+        public List<Carte> getTable() {
+            return table;
+        }
+
+    }
+
     public Noeud(Game g) {
-        infoSet = "";
+        infoSet = new InfoSet();
         game = g;
         NUM_ACTION = game.getDeck().getDeckSize();
         sumRegret = new ArrayList<>();
         strategy = new ArrayList<>();
         sumStrategy = new ArrayList<>();
     }
+
+    // public void undo(){
+    //     List<Carte> cartes = new ArrayList<>();
+    //     for(Coup c : game.getRounds().get(game.getRounds().size()-1).getPli()){
+    //         cartes.add()
+    //     }
+    // }
 
     public List<Double> getStrategy(double weight) {
         List<Carte> actions = game.getCurrentRound().getPlayableCard(game.getCurrentRound().getCurrentPlayer());
@@ -68,6 +115,14 @@ public class Noeud {
         return avgStrategy;
     }
 
+    public int payoff(Player player){
+        for(Player p : game.getPlayers()){
+            if(player.getId()!=p.getId()){
+                return player.getScore()-p.getScore();
+            }
+        }
+        throw new IllegalArgumentException();
+    }
     @Override
     public String toString() {
         return infoSet + " : " + getAverageStrategy();

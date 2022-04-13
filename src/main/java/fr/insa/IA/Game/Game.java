@@ -24,7 +24,7 @@ public class Game {
 
     public void proceedGame(){
         Player currentPlayer = players.get(0);
-        while(players.get(0).nbCartes() !=0) {
+        while(!isOver()) {
             currentRound = new Round(players, currentPlayer);
             currentPlayer = currentRound.roundProceed(this);
         }
@@ -37,6 +37,19 @@ public class Game {
         System.out.println("Player " + winner.getId() + " a gagné !!!!!!");
     }
 
+    public boolean isOver(){
+        boolean res = true;
+        for(Player player :players){
+            if(player.nbCartes()!=0){
+                res = false;
+            }
+        }
+        return res;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
     public void addRound(Round round){
         rounds.add(round);
     }
@@ -47,5 +60,8 @@ public class Game {
 
     public Deck getDeck() {
         return deck;
+    }
+    public List<Round> getRounds() {
+        return rounds;
     }
 }

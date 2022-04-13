@@ -110,5 +110,8 @@ public class Round {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+    public List<Coup> getPli() {
+        return pli;
+    }
 
 }
