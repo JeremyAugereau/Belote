@@ -13,7 +13,7 @@ public class Game {
     private Deck deck;
     private List<Round> rounds;
     private Round currentRound;
-    private Player player;
+    private Player currentPlayer;
     private List<Carte> history; 
 
     public Game(int nbPlayer) {
@@ -25,14 +25,14 @@ public class Game {
         rounds = new ArrayList<>();
         deck = new Deck();
         deck.deal(players);
-        player = players.get(0);
-        currentRound = new Round(players, player, this);
+        currentPlayer = players.get(0);
+        currentRound = new Round(players, currentPlayer, this);
     }
 
     public void proceedGame() {
         while (!isOver()) {
-            currentRound = new Round(players, player, this);
-            player = currentRound.roundProceed();
+            currentRound = new Round(players, currentPlayer, this);
+            currentPlayer = currentRound.roundProceed();
         }
         Player winner = players.get(0);
         for (Player p : players) {
@@ -99,20 +99,20 @@ public class Game {
 
     public Round next(Carte carte, Round round, Player player){
         if(round == null){
-            round = new Round(players, player, this);
-            round.actionProceed(player,carte);
+            round = new Round(players, currentPlayer, this);
+            round.actionProceed(currentPlayer,carte);
             for(Player p: players){
                 if(player.getId()!=p.getId()){
-                    player = p;
+                    currentPlayer = p;
                 }
             }
             history.add(carte);
             return round;
         }else {
-            round.actionProceed(player,carte);
+            round.actionProceed(currentPlayer,carte);
             history.add(carte);
             rounds.add(round);
-            player = round.getRoundWinner();
+            currentPlayer = round.getRoundWinner();
             return null;
         }
         
@@ -178,13 +178,13 @@ public class Game {
             infoset.setCurrentCarte(null);
         }
         for(Player player: players){
-            if(player.getId()!=player.getId()){
+            if(currentPlayer.getId()!=player.getId()){
                 infoset.setEnemyTable(player.getTable());
             }
         }
-        infoset.setHand(player.getHand());
+        infoset.setHand(currentPlayer.getHand());
         infoset.setHistory(history);
-        infoset.setTable(player.getTable());
+        infoset.setTable(currentPlayer.getTable());
         return infoset;
     }
 }

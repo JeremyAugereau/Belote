@@ -61,6 +61,7 @@ public class CFR {
     }
 
     public double cfr(Game game,int idPlayer, double pi,double po){
+    
         if(game.isOver())return game.payoff(game.getPlayerById(idPlayer));
         int numAction = game.getCurrentRound().getPlayableCard(game.getPlayerById(idPlayer)).size();
         Noeud noeud;
