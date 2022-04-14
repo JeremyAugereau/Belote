@@ -53,6 +53,7 @@ public class Round {
         players = plist;
         this.game = game;
         firstPlayer = player;
+        currentPlayer = firstPlayer;
         pli = new ArrayList<>();
     }
 
@@ -64,7 +65,7 @@ public class Round {
         }
         roundWinner = getRoundWinner();
         roundWinner.setScore(roundWinner.getScore()+getRoundValue());
-        game.addRound(this);
+        game.addRound(this); 
         return roundWinner;
     }
 
@@ -91,6 +92,20 @@ public class Round {
         player.removeCarte(cartePlayed);
         game.addHistory(cartePlayed);
         
+    }
+
+    public void actionProceed(Player player,Carte carte){
+        if(!(getPlayableCard(player).contains(carte))){
+            throw new IllegalArgumentException();
+        }
+        if(player.getHand().contains(carte)){
+            pli.add(new Coup(player, carte,-1));
+        }else{
+            pli.add(new Coup(player, carte,player.getTable().indexOf(carte)));
+        }
+        player.removeCarte(carte);
+        game.addHistory(carte);
+
     }
 
     public List<Carte> getPlayableCard(Player player){
@@ -141,6 +156,9 @@ public class Round {
     }
     public List<Coup> getPli() {
         return pli;
+    }
+    public void removeCoup(Coup c){
+        pli.remove(c);
     }
 
 }

@@ -7,6 +7,7 @@ import fr.insa.IA.Cartes.Carte;
 import fr.insa.IA.Cartes.Deck;
 import fr.insa.IA.Game.Game;
 import fr.insa.IA.Game.Round;
+import fr.insa.IA.IA.CFR;
 import fr.insa.IA.Player.Player;
 
 
@@ -42,8 +43,11 @@ public class App {
         // System.out.println("P1 score : " + p1.getScore());
         // System.out.println("P2 score : " + p2.getScore());
 
-        Game game  = new Game(2);
-        game.proceedGame();
+        // Game game  = new Game(2);
+        // game.proceedGame();
+
+        CFR bot = new CFR();
+        System.out.println(bot.training(10));
 
     }
 }

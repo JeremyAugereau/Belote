@@ -13,7 +13,7 @@ public class Game {
     private Deck deck;
     private List<Round> rounds;
     private Round currentRound;
-    private Player currentPlayer;
+    private Player player;
     private List<Carte> history; 
 
     public Game(int nbPlayer) {
@@ -25,14 +25,14 @@ public class Game {
         rounds = new ArrayList<>();
         deck = new Deck();
         deck.deal(players);
-        currentPlayer = players.get(0);
+        player = players.get(0);
+        currentRound = new Round(players, player, this);
     }
 
     public void proceedGame() {
-        currentPlayer = players.get(0);
         while (!isOver()) {
-            currentRound = new Round(players, currentPlayer, this);
-            currentPlayer = currentRound.roundProceed();
+            currentRound = new Round(players, player, this);
+            player = currentRound.roundProceed();
         }
         Player winner = players.get(0);
         for (Player p : players) {
@@ -43,10 +43,30 @@ public class Game {
         System.out.println("Player " + winner.getId() + " a gagné !!!!!!");
     }
 
+    // public void undo(){
+    //     Round lastRound = rounds.remove(rounds.size()-1);
+    //     lastRound.getRoundWinner().setScore(lastRound.getRoundWinner().getScore()-lastRound.getRoundValue());
+    //     for(Round.Coup c:lastRound.getPli()){
+    //         Carte cartePlayed =c.getCarte();
+    //         Player player =c.getPlayer();
+    //         int estDeLaMain= c.getEstDeLaMain();
+    //         history.remove(cartePlayed);
+
+    //         if(estDeLaMain==-1){
+    //             player.addHand(cartePlayed);
+    //         }else{
+    //             player.setSecret(estDeLaMain, player.getTable().get(estDeLaMain));
+    //             player.setTable(estDeLaMain, cartePlayed);
+    //         }
+            
+    //     }
+    // }
+
     public void undo(){
-        Round lastRound = rounds.remove(rounds.size()-1);
-        lastRound.getRoundWinner().setScore(lastRound.getRoundWinner().getScore()-lastRound.getRoundValue());
-        for(Round.Coup c:lastRound.getPli()){
+        Round lastRound = currentRound;
+        
+        if(lastRound.getPli().size()==1){
+            Round.Coup c= lastRound.getPli().get(0);
             Carte cartePlayed =c.getCarte();
             Player player =c.getPlayer();
             int estDeLaMain= c.getEstDeLaMain();
@@ -58,14 +78,44 @@ public class Game {
                 player.setSecret(estDeLaMain, player.getTable().get(estDeLaMain));
                 player.setTable(estDeLaMain, cartePlayed);
             }
-            
+            currentRound = rounds.remove(rounds.size()-1);
+        }else if(lastRound.getPli().size()==2){
+            Round.Coup c= lastRound.getPli().get(1);
+            Carte cartePlayed =c.getCarte();
+            Player player =c.getPlayer();
+            int estDeLaMain= c.getEstDeLaMain();
+            history.remove(cartePlayed);
+            if(estDeLaMain==-1){
+                player.addHand(cartePlayed);
+            }else{
+                player.setSecret(estDeLaMain, player.getTable().get(estDeLaMain));
+                player.setTable(estDeLaMain, cartePlayed);
+            }
+            lastRound.removeCoup(c);
+        }else{
+            throw new IllegalArgumentException();
         }
     }
 
-    public void next(Carte carte){
-        Round round = new Round(players,currentPlayer,this);
-        history.add(carte);
-
+    public Round next(Carte carte, Round round, Player player){
+        if(round == null){
+            round = new Round(players, player, this);
+            round.actionProceed(player,carte);
+            for(Player p: players){
+                if(player.getId()!=p.getId()){
+                    player = p;
+                }
+            }
+            history.add(carte);
+            return round;
+        }else {
+            round.actionProceed(player,carte);
+            history.add(carte);
+            rounds.add(round);
+            player = round.getRoundWinner();
+            return null;
+        }
+        
     }
 
     public boolean isOver() {
@@ -128,13 +178,13 @@ public class Game {
             infoset.setCurrentCarte(null);
         }
         for(Player player: players){
-            if(currentPlayer.getId()!=player.getId()){
+            if(player.getId()!=player.getId()){
                 infoset.setEnemyTable(player.getTable());
             }
         }
-        infoset.setHand(currentPlayer.getHand());
+        infoset.setHand(player.getHand());
         infoset.setHistory(history);
-        infoset.setTable(currentPlayer.getTable());
+        infoset.setTable(player.getTable());
         return infoset;
     }
 }

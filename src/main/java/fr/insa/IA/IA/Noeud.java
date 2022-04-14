@@ -1,6 +1,7 @@
 package fr.insa.IA.IA;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import fr.insa.IA.Cartes.Carte;
@@ -23,68 +24,28 @@ public class Noeud {
         infoSet = new InfoSet();
         game = g;
         NUM_ACTION = game.getDeck().getDeckSize();
-        sumRegret = new ArrayList<>();
-        strategy = new ArrayList<>();
-        sumStrategy = new ArrayList<>();
+        sumRegret = new ArrayList<>(Collections.nCopies(NUM_ACTION, 0.0));
+        strategy = new ArrayList<>(Collections.nCopies(NUM_ACTION, 0.0));
+        sumStrategy = new ArrayList<>(Collections.nCopies(NUM_ACTION, 0.0));
     }
 
-    // public void undo(){
-    // List<Carte> cartes = new ArrayList<>();
-    // for(Coup c : game.getRounds().get(game.getRounds().size()-1).getPli()){
-    // cartes.add()
-    // }
-    // }
-
-    // public List<Double> getStrategy(double weight) {
-    //     List<Carte> actions = game.getCurrentRound().getPlayableCard(game.getCurrentRound().getCurrentPlayer());
-    //     int numActions = actions.size();
-    //     int normalizationSum = 0;
-
-    //     for (Carte c : actions) {
-    //         int i = actions.indexOf(c);
-    //         if (sumRegret.get(i) > 0) {
-    //             strategy.set(i, sumRegret.get(i));
-    //         } else {
-    //             strategy.set(i, 0.0);
-    //         }
-    //         normalizationSum += strategy.get(i);
-    //     }
-
-    //     for (Carte c : actions) {
-    //         int i = actions.indexOf(c);
-    //         if (normalizationSum > 0) {
-    //             strategy.set(i, strategy.get(i) / normalizationSum);
-    //         } else {
-    //             strategy.set(i, 1.0 / numActions);
-    //         }
-    //         sumStrategy.set(i, weight * strategy.get(i) + sumStrategy.get(i));
-    //     }
-    //     return strategy;
-    // }
-
-    // public List<Double> getAverageStrategy() {
-    //     List<Double> avgStrategy = new ArrayList<>();
-    //     int normalizationSum = 0;
-
-    //     for (int i = 0; i < NUM_ACTION; i++) {
-    //         normalizationSum += strategy.get(i);
-    //     }
-    //     for (int i = 0; i < NUM_ACTION; i++) {
-    //         if (normalizationSum > 0) {
-    //             avgStrategy.set(i, sumStrategy.get(i) / normalizationSum);
-    //         } else {
-    //             avgStrategy.set(i, 1.0 / NUM_ACTION);
-    //         }
-    //     }
-    //     return avgStrategy;
-    // }
-
+    
     
     public List<Double> getSumRegret() {
         return sumRegret;
     }
-    // @Override
-    // public String toString() {
-    //     return infoSet + " : " + getAverageStrategy();
-    // }
+
+    public void setSumregret(int i,double d){
+        sumRegret.set(i,d);
+    }
+    public List<Double> getSumStrategy() {
+        return sumStrategy;
+    }
+    public void setSumStrategy(int i,double d){
+        sumStrategy.set(i,d);
+    }
+    public List<Double> getStrategy() {
+        return strategy;
+    }
+
 }
