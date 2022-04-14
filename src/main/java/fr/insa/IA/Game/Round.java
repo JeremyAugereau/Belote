@@ -14,12 +14,32 @@ import fr.insa.IA.Player.Player;
 public class Round {
 
     public class Coup {
-        Player player;
-        Carte carte;
+        private Player player;
+        private Carte carte;
+        private int estDeLaMain;
 
-        public Coup (Player p, Carte c) {
+        public Coup (Player p, Carte c,int estDeLaMain) {
             player = p;
             carte = c;
+            this.estDeLaMain = estDeLaMain;
+        }
+        public Carte getCarte() {
+            return carte;
+        }
+        public Player getPlayer() {
+            return player;
+        }
+        public int getEstDeLaMain(){
+            return estDeLaMain;
+        }
+        public void setCarte(Carte carte) {
+            this.carte = carte;
+        }
+        public void setEstDeLaMain(int estDeLaMain) {
+            this.estDeLaMain = estDeLaMain;
+        }
+        public void setPlayer(Player player) {
+            this.player = player;
         }
     }
 
@@ -27,14 +47,16 @@ public class Round {
     private Player currentPlayer;
     private List<Player> players;
     private List<Coup> pli;
+    private Game game;
 
-    public Round(List<Player> plist,Player player) {
+    public Round(List<Player> plist,Player player, Game game) {
         players = plist;
+        this.game = game;
         firstPlayer = player;
         pli = new ArrayList<>();
     }
 
-    public Player roundProceed(Game game){
+    public Player roundProceed(){
         Player roundWinner;
         for(int i = players.indexOf(firstPlayer); i<players.indexOf(firstPlayer)+players.size();i++){
             currentPlayer = players.get(i%players.size());
@@ -60,8 +82,15 @@ public class Round {
         Scanner input = new Scanner(System.in);
         int nb = Integer.parseInt(input.nextLine());
         Carte cartePlayed = getPlayableCard(player).get(nb);
-        pli.add(new Coup(player, cartePlayed));
+        if(player.getHand().contains(cartePlayed)){
+            pli.add(new Coup(player, cartePlayed,-1));
+        }else{
+            pli.add(new Coup(player, cartePlayed,player.getTable().indexOf(cartePlayed)));
+        }
+        
         player.removeCarte(cartePlayed);
+        game.addHistory(cartePlayed);
+        
     }
 
     public List<Carte> getPlayableCard(Player player){

@@ -109,6 +109,10 @@ public class Player {
         table.add(c);
     }
 
+    public void setTable(int i,Carte c){
+        table.set(i,c);
+    }
+
     /**
      * Retourne les cartes face cachée du joueur
      * 
@@ -126,6 +130,10 @@ public class Player {
     public void addSecret(Carte c) {
         secret.add(c);
     }
+    public void setSecret(int i,Carte c){
+        secret.set(i,c);
+    }
+
 
     /**
      * @return int retourne le score
@@ -133,6 +141,7 @@ public class Player {
     public int getScore() {
         return score;
     }
+
 
     /**
      * @param score set le score du joueur
