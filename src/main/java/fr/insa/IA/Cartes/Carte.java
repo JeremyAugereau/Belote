@@ -40,7 +40,17 @@ public class Carte implements Comparable<Carte> {
         Carte.printCards(ens);
         return null;
     }
-
+    @Override
+    public int hashCode() {
+        return (hauteur.ordinal()*13+couleur.ordinal())*53;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)return true;
+        if(obj==null || getClass() != obj.getClass())return false;
+        Carte o = (Carte) obj;
+        return(o.couleur == couleur && o.hauteur == hauteur);
+    }
     /**
      * Afficher un ensemble de cartes sur une ligne.
      * cf RlCards
