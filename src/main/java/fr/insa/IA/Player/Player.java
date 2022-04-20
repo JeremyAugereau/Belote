@@ -81,6 +81,11 @@ public class Player {
     public List<Carte> getHand() {
         return hand;
     }
+    @Override
+    public String toString() {
+        
+        return "Player "+id;
+    }
 
     /**
      * Ajoute une carte à la main du joueur

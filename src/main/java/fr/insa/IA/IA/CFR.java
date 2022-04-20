@@ -22,9 +22,15 @@ public class CFR {
         for (int i = 1; i <= n; i++) {
             System.out.print(".");
             Game game = new Game(2);
-            value += cfr(game, 1, 1.0, 1.0);
+            for (Player p : game.getPlayers()) {
+                System.out.println(p);
+                Carte.printCards(p.getHand());
+                Carte.printCards(p.getTable());
+                Carte.printCards(p.getSecret());
+            }
+            value += cfr(game, 1, 1.0, 1.0, null);
         }
-        return value/n;
+        return value / n;
     }
 
     public List<Double> getStrategy(List<Double> array) {
@@ -49,58 +55,73 @@ public class CFR {
         return strategy;
     }
 
-    public void updateStrategySum(Noeud noeud,List<Double> strategy,double p){
-        
+    public void updateStrategySum(Noeud noeud, List<Double> strategy, double p) {
+
         int n = noeud.getSumStrategy().size();
         List<Double> strategySum = noeud.getSumStrategy();
         for (int i = 0; i < n; i++) {
-            double tmp= strategy.get(i)*p+strategySum.get(i);
+            double tmp = strategy.get(i) * p + strategySum.get(i);
             noeud.setSumStrategy(i, tmp);
         }
 
     }
 
-    public double cfr(Game game,int idPlayer, double pi,double po){
-    
-        if(game.isOver())return game.payoff(game.getPlayerById(idPlayer));
+    public double cfr(Game game, int idPlayer, double pi, double po, Round round) {
+
+        if (game.isOver())
+            return game.payoff(game.getPlayerById(idPlayer));
         int numAction = game.getCurrentRound().getPlayableCard(game.getPlayerById(idPlayer)).size();
         Noeud noeud;
-        if(hashMap.containsKey(game.getGameInfoSet())){
+        if (hashMap.containsKey(game.getGameInfoSet())) {
             noeud = hashMap.get(game.getGameInfoSet());
-        }else{
+        } else {
             noeud = new Noeud(game);
-            hashMap.put(game.getGameInfoSet(),noeud);
+            hashMap.put(game.getGameInfoSet(), noeud);
         }
         List<Double> strategy = getStrategy(noeud.getSumRegret());
         List<Double> utils = new ArrayList<>(Collections.nCopies(numAction, 0.0));
-        double node_util =0;
-        List<Carte> actions = game.getCurrentRound().getPlayableCard(game.getCurrentRound().getCurrentPlayer());
-        Round round = null;
-        for(Carte carte : actions){
-            round = game.next(carte, round,game.getCurrentRound().getCurrentPlayer());
-            int a =actions.indexOf(carte);
-            if(idPlayer==1){
-                double res = utils.get(a)-cfr(game,2,pi*strategy.get(a),po);
+        double node_util = 0;
+        Round cpRound = null;
+        List<Carte> actions = game.getPlayerById(idPlayer).getHand();
+        actions.addAll(game.getPlayerById(idPlayer).getTable());
+        if (round != null) {
+            cpRound = new Round(round);
+            actions = cpRound.getPlayableCard(game.getPlayerById(idPlayer));
+        }
+        // System.out.println("------------------------------------------");
+        // Carte.printCards(actions);
+        // System.out.println("------------------------------------------");
+
+        for (Carte carte : actions) {
+
+            cpRound = game.next(carte, cpRound);
+            int a = actions.indexOf(carte);
+            System.out.println("------------------------------------------");
+            System.out.println(a);
+            System.out.println(actions.contains(carte));
+            System.out.println("------------------------------------------");
+            if (idPlayer == 1) {
+                double res = utils.get(a) - cfr(game, 2, pi * strategy.get(a), po, cpRound);
                 utils.set(a, res);
-            }else{
-                double res = utils.get(a)-cfr(game,1,pi,strategy.get(a)*po);
+            } else {
+                double res = utils.get(a) - cfr(game, 1, pi, strategy.get(a) * po, cpRound);
                 utils.set(a, res);
             }
             game.undo();
-            node_util += strategy.get(a)*utils.get(a);
+            node_util += strategy.get(a) * utils.get(a);
         }
-        for(Carte carte : actions){
-            int a =actions.indexOf(carte);
-            double regret= utils.get(a)-node_util;
-            if(idPlayer ==1){
-                noeud.setSumregret(a, noeud.getSumRegret().get(a)+ po* regret);
-            }else{
-                noeud.setSumregret(a, noeud.getSumRegret().get(a)+ pi* regret); 
+        for (Carte carte : actions) {
+            int a = actions.indexOf(carte);
+            double regret = utils.get(a) - node_util;
+            if (idPlayer == 1) {
+                noeud.setSumregret(a, noeud.getSumRegret().get(a) + po * regret);
+            } else {
+                noeud.setSumregret(a, noeud.getSumRegret().get(a) + pi * regret);
             }
         }
-        if(idPlayer ==1){
+        if (idPlayer == 1) {
             updateStrategySum(noeud, strategy, pi);
-        }else{
+        } else {
             updateStrategySum(noeud, strategy, po);
         }
         return node_util;

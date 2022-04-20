@@ -44,7 +44,6 @@ public class Round {
     }
 
     private Player firstPlayer;
-    private Player currentPlayer;
     private List<Player> players;
     private List<Coup> pli;
     private Game game;
@@ -53,15 +52,20 @@ public class Round {
         players = plist;
         this.game = game;
         firstPlayer = player;
-        currentPlayer = firstPlayer;
         pli = new ArrayList<>();
+    }
+    public Round(Round round){
+        this.firstPlayer=round.firstPlayer;
+        this.game=round.game;
+        this.players = round.players;
+        this.pli = round.pli;
     }
 
     public Player roundProceed(){
         Player roundWinner;
         for(int i = players.indexOf(firstPlayer); i<players.indexOf(firstPlayer)+players.size();i++){
-            currentPlayer = players.get(i%players.size());
-            actionProceed(currentPlayer);
+            game.setCurrentPlayer(players.get(i%players.size()));
+            actionProceed(game.getCurrentPlayer());
         }
         roundWinner = getRoundWinner();
         roundWinner.setScore(roundWinner.getScore()+getRoundValue());
@@ -96,6 +100,11 @@ public class Round {
 
     public void actionProceed(Player player,Carte carte){
         if(!(getPlayableCard(player).contains(carte))){
+            // System.out.println("------------------------------------------");
+            // System.out.println(player);
+            // Carte.printCards(carte);
+            // Carte.printCards(getPlayableCard(player));
+            // System.out.println("------------------------------------------");
             throw new IllegalArgumentException();
         }
         if(player.getHand().contains(carte)){
@@ -104,10 +113,23 @@ public class Round {
             pli.add(new Coup(player, carte,player.getTable().indexOf(carte)));
         }
         player.removeCarte(carte);
+        game.setCurrentPlayer(nextCurrentPlayer());
         game.addHistory(carte);
 
     }
 
+    private Player nextCurrentPlayer() {
+        if(pli.size() == players.size()){
+            return getRoundWinner();
+        }else{
+            for(Player p: players){
+                if(game.getCurrentPlayer().getId()!=p.getId()){
+                    return p;
+                }
+            }
+            return game.getPlayerById((game.getCurrentPlayer().getId()%players.size())+1);
+        }
+    }
     public List<Carte> getPlayableCard(Player player){
         List<Carte> playableCartes = new ArrayList<>();
         playableCartes.addAll(player.getHand());
@@ -118,7 +140,9 @@ public class Round {
         }
 
         for(Coup c : pli){
-            if (c.player == player) throw new IllegalArgumentException();
+            if (c.player == player){
+                throw new IllegalArgumentException();
+            } 
             Couleur mustCoul =  pli.get(0).carte.getCouleur();
             playableCartes.removeIf(crt -> crt.getCouleur() != mustCoul);
         }
@@ -151,9 +175,7 @@ public class Round {
         return score;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
+    
     public List<Coup> getPli() {
         return pli;
     }

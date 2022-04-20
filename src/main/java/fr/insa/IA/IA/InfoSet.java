@@ -61,11 +61,15 @@ public class InfoSet {
         }
         hash = hash *17;
         for(Carte c : table){
-            hash += c.hashCode();
+            if(c!=null){
+                hash += c.hashCode();
+            }
         }
         hash = hash *19;
         for(Carte c : enemyTable){
-            hash += c.hashCode();
+            if(c!=null){
+                hash += c.hashCode();
+            }
         }
         hash = hash *23;
         if(currentCarte != null)
@@ -92,7 +96,7 @@ public class InfoSet {
             if(!o.hand.contains(c)) return false;
         }
         if(currentCarte == null && o.currentCarte == null) return true;
-        if(currentCarte != null || o.currentCarte != null || !currentCarte.equals(o.currentCarte))return false;
+        if(currentCarte == null || o.currentCarte == null || !currentCarte.equals(o.currentCarte))return false;
         return true;
     }
 

@@ -64,7 +64,7 @@ public class Game {
 
     public void undo(){
         Round lastRound = currentRound;
-        
+        System.out.println(lastRound.getPli().size());
         if(lastRound.getPli().size()==1){
             Round.Coup c= lastRound.getPli().get(0);
             Carte cartePlayed =c.getCarte();
@@ -79,7 +79,10 @@ public class Game {
                 player.setTable(estDeLaMain, cartePlayed);
             }
             currentRound = rounds.remove(rounds.size()-1);
-        }else if(lastRound.getPli().size()==2){
+            currentPlayer=rounds.get(rounds.size()-1).getRoundWinner();
+        }else if(lastRound.getPli().size()==0){
+            rounds.remove(rounds.size()-1);
+            lastRound = rounds.get(rounds.size()-1);
             Round.Coup c= lastRound.getPli().get(1);
             Carte cartePlayed =c.getCarte();
             Player player =c.getPlayer();
@@ -92,27 +95,27 @@ public class Game {
                 player.setTable(estDeLaMain, cartePlayed);
             }
             lastRound.removeCoup(c);
+            currentPlayer= lastRound.getPli().get(0).getPlayer();
         }else{
             throw new IllegalArgumentException();
         }
     }
 
-    public Round next(Carte carte, Round round, Player player){
-        if(round == null){
+    public Round next(Carte carte, Round round){
+        if(round == null ){
+            System.out.println("*********************************************************");
+            System.out.println(currentPlayer);
+            Carte.printCards(carte);
             round = new Round(players, currentPlayer, this);
+            addRound(round);
             round.actionProceed(currentPlayer,carte);
-            for(Player p: players){
-                if(player.getId()!=p.getId()){
-                    currentPlayer = p;
-                }
-            }
             history.add(carte);
             return round;
         }else {
+            System.out.println(currentPlayer);
+            Carte.printCards(carte);
             round.actionProceed(currentPlayer,carte);
             history.add(carte);
-            rounds.add(round);
-            currentPlayer = round.getRoundWinner();
             return null;
         }
         
@@ -138,6 +141,12 @@ public class Game {
 
     public Round getCurrentRound() {
         return currentRound;
+    }
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     public Deck getDeck() {
@@ -187,4 +196,5 @@ public class Game {
         infoset.setTable(currentPlayer.getTable());
         return infoset;
     }
+
 }

@@ -74,6 +74,11 @@ public class Carte implements Comparable<Carte> {
         for (String s : lignes) System.out.println(s);
     }
 
+    public static void printCards(Carte carte){
+        List<Carte> clist = new ArrayList<>();
+        clist.add(carte);
+        printCards(clist);
+    }
 
     public Hauteur getHauteur() {
         return this.hauteur;

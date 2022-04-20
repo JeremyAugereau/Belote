@@ -48,8 +48,8 @@ public class App {
 
 
 
-        // CFR bot = new CFR();
-        // System.out.println(bot.training(1));
+        CFR bot = new CFR();
+        System.out.println(bot.training(1));
 
         
         
