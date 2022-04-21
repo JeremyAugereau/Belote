@@ -28,7 +28,7 @@ public class CFR {
                 Carte.printCards(p.getTable());
                 Carte.printCards(p.getSecret());
             }
-            value += cfr(game, 1, 1.0, 1.0, null);
+            value += cfr(game, 1, 1.0, 1.0);
         }
         return value / n;
     }
@@ -66,13 +66,16 @@ public class CFR {
 
     }
 
-    public double cfr(Game game, int idPlayer, double pi, double po, Round round) {
+    public double cfr(Game game, int idPlayer, double pi, double po) {
 
         if (game.isOver())
             return game.payoff(game.getPlayerById(idPlayer));
-        List<Carte> actions = game.getPlayerById(idPlayer).getKnownCards();
+        if (game.getRounds().size() == 0) {
+            game.addRound(new Round(game.getPlayers(), game.getCurrentPlayer(), game));
+        }
+        Round round = game.getCurrentRound();
+        List<Carte> actions = round.getPlayableCard(game.getPlayerById(idPlayer));
         int numAction = actions.size();
-        // int numAction = game.getCurrentRound().getPlayableCard(game.getPlayerById(idPlayer)).size();
         Noeud noeud;
         if (hashMap.containsKey(game.getGameInfoSet())) {
             noeud = hashMap.get(game.getGameInfoSet());
@@ -83,11 +86,6 @@ public class CFR {
         List<Double> strategy = getStrategy(noeud.getSumRegret());
         List<Double> utils = new ArrayList<>(Collections.nCopies(numAction, 0.0));
         double node_util = 0;
-        Round cpRound = null;
-        if (round != null) {
-            cpRound = new Round(round);
-            actions = cpRound.getPlayableCard(game.getPlayerById(idPlayer));
-        }
         // System.out.println("------------------------------------------");
         // Carte.printCards(actions);
         // System.out.println("------------------------------------------");
@@ -95,7 +93,7 @@ public class CFR {
         for (Carte carte : actions) {
 
             int a = actions.indexOf(carte);
-            cpRound = game.next(carte, cpRound);
+            game.next(carte, round);
             // System.out.println("------------------------------------------");
             // System.out.println(a);
             // System.out.println(actions.contains(carte));
@@ -104,15 +102,15 @@ public class CFR {
             int nextId = game.getCurrentPlayer().getId(); // deja update ds next
             if (idPlayer == nextId) {
                 if (idPlayer == 1) {
-                    res = utils.get(a) + cfr(game, nextId, pi * strategy.get(a), po, cpRound);
+                    res = utils.get(a) + cfr(game, nextId, pi * strategy.get(a), po);
                 } else {
-                    res = utils.get(a) + cfr(game, nextId, pi, strategy.get(a) * po, cpRound);
+                    res = utils.get(a) + cfr(game, nextId, pi, strategy.get(a) * po);
                 }
-            } else { // ATTENTION c quoi currentRound par rapport à cpRound ?
+            } else {
                 if (idPlayer == 1) {
-                    res = utils.get(a) - cfr(game, nextId, pi * strategy.get(a), po, cpRound);
+                    res = utils.get(a) - cfr(game, nextId, pi * strategy.get(a), po);
                 } else {
-                    res = utils.get(a) - cfr(game, nextId, pi, strategy.get(a) * po, cpRound);
+                    res = utils.get(a) - cfr(game, nextId, pi, strategy.get(a) * po);
                 }
             }
             utils.set(a, res);
@@ -124,11 +122,8 @@ public class CFR {
             // double res = utils.get(a) - cfr(game, 1, pi, strategy.get(a) * po, cpRound);
             // utils.set(a, res);
             // }
-            try {
-                game.undo();
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Fin du Undo");
-            }
+
+            game.undo();
             node_util += strategy.get(a) * utils.get(a);
         }
         for (Carte carte : actions) {

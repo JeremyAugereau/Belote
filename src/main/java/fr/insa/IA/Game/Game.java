@@ -64,62 +64,57 @@ public class Game {
 
     public void undo() {
         System.out.println(rounds.size());
-        Round lastRound = currentRound;
+        Round lastRound = rounds.get(rounds.size() - 1);
         // System.out.println(lastRound.getPli().size());
-        if (lastRound.getPli().size() == 1) {
-            Round.Coup c = lastRound.getPli().get(0);
-            Carte cartePlayed = c.getCarte();
-            Player player = c.getPlayer();
-            int estDeLaMain = c.getEstDeLaMain();
-            history.remove(cartePlayed);
-
-            if (estDeLaMain == -1) {
-                player.addHand(cartePlayed);
-            } else {
-                player.setSecret(estDeLaMain, player.getTable().get(estDeLaMain));
-                player.setTable(estDeLaMain, cartePlayed);
-            }
-            currentRound = rounds.remove(rounds.size() - 1);
-            currentPlayer = rounds.get(rounds.size() - 1).getRoundWinner();
+        Round.Coup c;
+        if (lastRound.getPli().size() == 2) {
+            c = lastRound.getPli().remove(1);
+        } else if (lastRound.getPli().size() == 1) {
+            rounds.remove(rounds.size() - 1);
+            c = lastRound.getPli().remove(0);
         } else if (lastRound.getPli().size() == 0) {
             rounds.remove(rounds.size() - 1);
-            lastRound = rounds.get(rounds.size() - 1); // throws IndexOutOfBoundException si on remonte trop loin
-            Round.Coup c = lastRound.getPli().get(1);
-            Carte cartePlayed = c.getCarte();
-            Player player = c.getPlayer();
-            int estDeLaMain = c.getEstDeLaMain();
-            history.remove(cartePlayed);
-            if (estDeLaMain == -1) {
-                player.addHand(cartePlayed);
-            } else {
-                player.setSecret(estDeLaMain, player.getTable().get(estDeLaMain));
-                player.setTable(estDeLaMain, cartePlayed);
-            }
-            lastRound.removeCoup(c);
-            currentPlayer = lastRound.getPli().get(0).getPlayer();
+            lastRound = rounds.get(rounds.size() - 1);
+            c = lastRound.getPli().remove(1);
         } else {
             throw new IllegalArgumentException();
         }
+        Carte cartePlayed = c.getCarte();
+        Player player = c.getPlayer();
+        int estDeLaMain = c.getEstDeLaMain();
+        history.remove(cartePlayed);
+        if (estDeLaMain == -1) {
+            player.addHand(cartePlayed);
+        } else {
+            player.setSecret(estDeLaMain, player.getTable().get(estDeLaMain));
+            player.setTable(estDeLaMain, cartePlayed);
+        }
+        currentPlayer = player;
     }
 
-    public Round next(Carte carte, Round round) {
-        if (round == null) {
+    public void next(Carte carte, Round round) {
+        if (round.getPli().size() == 2) {
+            System.out.println("*********************************************************");
+            Round nextRound = new Round(players, currentPlayer, this);
+            addRound(nextRound);
+            System.out.println(currentPlayer);
+            Carte.printCards(carte);
+            nextRound.actionProceed(currentPlayer, carte);
+            history.add(carte);
+        } else if (round.getPli().size() == 1) {
+            System.out.println(currentPlayer);
+            Carte.printCards(carte);
+            round.actionProceed(currentPlayer, carte);
+            history.add(carte);
+        } else if (round.getPli().size() == 0) { // ne sert qu'au tout début
             System.out.println("*********************************************************");
             System.out.println(currentPlayer);
             Carte.printCards(carte);
-            round = new Round(players, currentPlayer, this);
-            addRound(round);
             round.actionProceed(currentPlayer, carte);
             history.add(carte);
-            return round;
         } else {
-            System.out.println(currentPlayer);
-            Carte.printCards(carte);
-            round.actionProceed(currentPlayer, carte);
-            history.add(carte);
-            return null;
+            throw new IllegalArgumentException();
         }
-
     }
 
     public boolean isOver() {
@@ -141,8 +136,6 @@ public class Game {
     }
 
     public Round getCurrentRound() {
-        if (rounds.size() < 1)
-            return new Round(players, currentPlayer, this);
         return rounds.get(rounds.size() - 1);
     }
 

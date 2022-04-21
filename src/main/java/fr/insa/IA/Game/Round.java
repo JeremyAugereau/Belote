@@ -135,7 +135,7 @@ public class Round {
         playableCartes.addAll(player.getHand());
         playableCartes.addAll(player.getTable());
 
-        if(pli.isEmpty()){
+        if(pli.isEmpty() || pli.size()==players.size()){
             return playableCartes;
         }
 
