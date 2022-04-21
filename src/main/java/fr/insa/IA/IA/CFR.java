@@ -70,7 +70,9 @@ public class CFR {
 
         if (game.isOver())
             return game.payoff(game.getPlayerById(idPlayer));
-        int numAction = game.getCurrentRound().getPlayableCard(game.getPlayerById(idPlayer)).size();
+        List<Carte> actions = game.getPlayerById(idPlayer).getKnownCards();
+        int numAction = actions.size();
+        // int numAction = game.getCurrentRound().getPlayableCard(game.getPlayerById(idPlayer)).size();
         Noeud noeud;
         if (hashMap.containsKey(game.getGameInfoSet())) {
             noeud = hashMap.get(game.getGameInfoSet());
@@ -82,7 +84,6 @@ public class CFR {
         List<Double> utils = new ArrayList<>(Collections.nCopies(numAction, 0.0));
         double node_util = 0;
         Round cpRound = null;
-        List<Carte> actions = game.getPlayerById(idPlayer).getKnownCards();
         if (round != null) {
             cpRound = new Round(round);
             actions = cpRound.getPlayableCard(game.getPlayerById(idPlayer));
