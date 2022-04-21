@@ -43,6 +43,20 @@ public class Player {
         return nbPlayer;
     }
 
+    public List<Carte> getKnownCards() {
+        List<Carte> res = new ArrayList<>();
+        for (Carte c : hand) {
+            res.add(c);
+        }
+        for (Carte c : table) {
+            res.add(c);
+        }
+        // for (Carte c : secret) {
+        //     res.add(c);
+        // }
+        return res;
+    }
+
     /**
      * Supprime une carte du jeu d'un joueur et la retourne
      * 
@@ -81,10 +95,11 @@ public class Player {
     public List<Carte> getHand() {
         return hand;
     }
+
     @Override
     public String toString() {
-        
-        return "Player "+id;
+
+        return "Player " + id;
     }
 
     /**
@@ -114,8 +129,8 @@ public class Player {
         table.add(c);
     }
 
-    public void setTable(int i,Carte c){
-        table.set(i,c);
+    public void setTable(int i, Carte c) {
+        table.set(i, c);
     }
 
     /**
@@ -135,10 +150,10 @@ public class Player {
     public void addSecret(Carte c) {
         secret.add(c);
     }
-    public void setSecret(int i,Carte c){
-        secret.set(i,c);
-    }
 
+    public void setSecret(int i, Carte c) {
+        secret.set(i, c);
+    }
 
     /**
      * @return int retourne le score
@@ -146,7 +161,6 @@ public class Player {
     public int getScore() {
         return score;
     }
-
 
     /**
      * @param score set le score du joueur

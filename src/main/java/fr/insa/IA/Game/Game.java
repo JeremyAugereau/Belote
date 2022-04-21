@@ -63,8 +63,9 @@ public class Game {
     // }
 
     public void undo(){
+        System.out.println(rounds.size());
         Round lastRound = currentRound;
-        System.out.println(lastRound.getPli().size());
+        // System.out.println(lastRound.getPli().size());
         if(lastRound.getPli().size()==1){
             Round.Coup c= lastRound.getPli().get(0);
             Carte cartePlayed =c.getCarte();
@@ -82,7 +83,7 @@ public class Game {
             currentPlayer=rounds.get(rounds.size()-1).getRoundWinner();
         }else if(lastRound.getPli().size()==0){
             rounds.remove(rounds.size()-1);
-            lastRound = rounds.get(rounds.size()-1);
+            lastRound = rounds.get(rounds.size()-1);    // throws IndexOutOfBoundException si on remonte trop loin
             Round.Coup c= lastRound.getPli().get(1);
             Carte cartePlayed =c.getCarte();
             Player player =c.getPlayer();

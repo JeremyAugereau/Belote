@@ -118,7 +118,7 @@ public class Round {
 
     }
 
-    private Player nextCurrentPlayer() {
+    public Player nextCurrentPlayer() {
         if(pli.size() == players.size()){
             return getRoundWinner();
         }else{
