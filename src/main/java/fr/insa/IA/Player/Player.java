@@ -46,13 +46,15 @@ public class Player {
     public List<Carte> getKnownCards() {
         List<Carte> res = new ArrayList<>();
         for (Carte c : hand) {
-            res.add(c);
+            if (c != null)
+                res.add(c);
         }
         for (Carte c : table) {
-            res.add(c);
+            if (c != null)
+                res.add(c);
         }
         // for (Carte c : secret) {
-        //     res.add(c);
+        // res.add(c);
         // }
         return res;
     }

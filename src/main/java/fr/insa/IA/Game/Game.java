@@ -66,6 +66,7 @@ public class Game {
         System.out.println(rounds.size());
         Round lastRound = rounds.get(rounds.size() - 1);
         // System.out.println(lastRound.getPli().size());
+
         Round.Coup c;
         if (lastRound.getPli().size() == 2) {
             c = lastRound.getPli().remove(1);
@@ -79,6 +80,7 @@ public class Game {
         } else {
             throw new IllegalArgumentException();
         }
+        
         Carte cartePlayed = c.getCarte();
         Player player = c.getPlayer();
         int estDeLaMain = c.getEstDeLaMain();
