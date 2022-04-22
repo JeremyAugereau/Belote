@@ -14,11 +14,9 @@ public class Game {
     private List<Round> rounds;
     private Round currentRound;
     private Player currentPlayer;
-    private List<Carte> history;
 
     public Game(int nbPlayer) {
         players = new ArrayList<>();
-        history = new ArrayList<>();
         for (int i = 0; i < nbPlayer; i++) {
             players.add(new Player());
         }
@@ -50,7 +48,6 @@ public class Game {
     // Carte cartePlayed =c.getCarte();
     // Player player =c.getPlayer();
     // int estDeLaMain= c.getEstDeLaMain();
-    // history.remove(cartePlayed);
 
     // if(estDeLaMain==-1){
     // player.addHand(cartePlayed);
@@ -63,7 +60,7 @@ public class Game {
     // }
 
     public void undo() {
-        System.out.println(rounds.size());
+        // System.out.println(rounds.size());
         Round lastRound = rounds.get(rounds.size() - 1);
         // System.out.println(lastRound.getPli().size());
 
@@ -86,7 +83,6 @@ public class Game {
         Carte cartePlayed = c.getCarte();
         Player player = c.getPlayer();
         int estDeLaMain = c.getEstDeLaMain();
-        history.remove(cartePlayed);
         if (estDeLaMain == -1) {
             player.addHand(cartePlayed);
         } else {
@@ -98,28 +94,25 @@ public class Game {
 
     public void next(Carte carte, Round round) {
         if (round.getPli().size() == 2) {
-            System.out.println("*********************************************************");
+            // System.out.println("*********************************************************");
             Round nextRound = new Round(players, currentPlayer, this);
             addRound(nextRound);
-            System.out.println(currentPlayer);
-            Carte.printCards(carte);
+            // System.out.println(currentPlayer);
+            // Carte.printCards(carte);
             nextRound.actionProceed(currentPlayer, carte);
-            history.add(carte);
         } else if (round.getPli().size() == 1) {
-            System.out.println(currentPlayer);
-            Carte.printCards(carte);
+            // System.out.println(currentPlayer);
+            // Carte.printCards(carte);
             round.actionProceed(currentPlayer, carte);
-            history.add(carte);
         } else if (round.getPli().size() == 0) { // ne sert qu'au tout début
-            System.out.println("#####################################");
+            //System.out.println("#####################################");
 
             // System.out.println("------------------------------------------");
             // Carte.printCards(currentPlayer.getKnownCards());
             // System.out.println("------------------------------------------");
-            System.out.println(currentPlayer);
-            Carte.printCards(carte);
+            // System.out.println(currentPlayer);
+            // Carte.printCards(carte);
             round.actionProceed(currentPlayer, carte);
-            history.add(carte);
         } else {
             throw new IllegalArgumentException();
         }
@@ -172,17 +165,21 @@ public class Game {
         throw new IllegalArgumentException();
     }
 
-    public void addHistory(Carte c) {
-        history.add(c);
-    }
 
-    public int payoff(Player player) {
-        for (Player p : getPlayers()) {
-            if (player.getId() != p.getId()) {
-                return player.getScore() - p.getScore();
-            }
+    public double payoff(Player player) {
+        double score =0;
+        for(Round round : rounds){
+            if(round.getRoundWinner().equals(player)){
+                for(Round.Coup coup : round.getPli()){
+                    score +=coup.getCarte().getHauteur().toScore();
+                }   
+            }else{
+                for(Round.Coup coup : round.getPli()){
+                    score -=coup.getCarte().getHauteur().toScore();
+                } 
+            }    
         }
-        throw new IllegalArgumentException();
+        return score;
     }
 
     public InfoSet getGameInfoSet() {
@@ -199,9 +196,12 @@ public class Game {
         }
         infoset.setHand(currentPlayer.getHand());
         List<Carte> h = new ArrayList<>();
-        for(Round.Coup c : getCurrentRound().getPli()){
-            h.add(c.getCarte());
+        for(Round r : rounds){
+            for(Round.Coup c : r.getPli()){
+                h.add(c.getCarte());
+            }
         }
+        
         infoset.setHistory(h);
         infoset.setTable(currentPlayer.getTable());
         return infoset;

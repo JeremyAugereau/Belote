@@ -24,7 +24,7 @@ public class CFR {
     public double training(int n) {
         double value = 0.0;
         for (int i = 1; i <= n; i++) {
-            System.out.print(".......................................................................");
+            // System.out.print(".......................................................................");
             Player.resetNbPlayer();
             Game game = new Game(2);
 
@@ -38,20 +38,21 @@ public class CFR {
             // game.getPlayerById(2).setTable(0, new Carte(Hauteur.DAME, Couleur.PIQUE));
             // game.getPlayerById(2).setSecret(0, new Carte(Hauteur.VALET, Couleur.CARREAU));
 
-            for (Player p : game.getPlayers()) {
-                System.out.println(p);
-                Carte.printCards(p.getHand());
-                Carte.printCards(p.getTable());
-                Carte.printCards(p.getSecret());
-            }
+            // for (Player p : game.getPlayers()) {
+            //     System.out.println(p);
+            //     Carte.printCards(p.getHand());
+            //     Carte.printCards(p.getTable());
+            //     Carte.printCards(p.getSecret());
+            // }
             value += cfr(game, 1, 1.0, 1.0);
         }
-        System.out.println("Taille de la Map : "+hashMap.size());
+        
         for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
-            if(entry.getKey().getHistory().size()!=0||true){
+            if(entry.getKey().getHistory().size()==0){
                 System.out.println(entry.getKey().toString() + entry.getValue().toString());
             }
         }
+        System.out.println("Taille de la Map : "+hashMap.size());
         return value / n;
     }
 
@@ -90,8 +91,11 @@ public class CFR {
 
     public double cfr(Game game, int idPlayer, double pi, double po) {
 
-        if (game.isOver())
+        if (game.isOver()){
+            System.out.println(game.payoff(game.getPlayerById(idPlayer)));
             return game.payoff(game.getPlayerById(idPlayer));
+        }
+            
         if (game.getRounds().size() == 0) { // IL NE FAUT JAMAIS QUE rounds SOIT VIDE
             game.addRound(new Round(game.getPlayers(), game.getCurrentPlayer(), game));
         }
@@ -107,7 +111,7 @@ public class CFR {
         }
         List<Double> strategy = getStrategy(noeud.getSumRegret());
         List<Double> utils = new ArrayList<>(Collections.nCopies(numAction, 0.0));
-        double node_util = 0;
+        double node_util = 0.0;
         // System.out.println("------------------------------------------");
         // Carte.printCards(actions);
         // System.out.println("------------------------------------------");

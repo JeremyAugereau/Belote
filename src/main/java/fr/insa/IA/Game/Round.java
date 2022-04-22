@@ -102,7 +102,6 @@ public class Round {
         }
 
         player.removeCarte(cartePlayed);
-        game.addHistory(cartePlayed);
 
     }
 
@@ -122,7 +121,6 @@ public class Round {
         }
         player.removeCarte(carte);
         game.setCurrentPlayer(nextCurrentPlayer());
-        game.addHistory(carte);
 
     }
 
