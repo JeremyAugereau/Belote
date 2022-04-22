@@ -6,6 +6,7 @@ import java.util.List;
 
 import fr.insa.IA.Cartes.Carte;
 import fr.insa.IA.Cartes.Deck;
+import fr.insa.IA.IA.CFR;
 import fr.insa.IA.IA.InfoSet;
 import fr.insa.IA.Player.Player;
 
@@ -42,6 +43,32 @@ public class Game implements Serializable{
         System.out.println("Player " + winner.getId() + " a gagné !!!!!!");
     }
 
+    public void proceedGame(CFR bot,int i) {
+        while(!isOver()){
+            addRound(new Round(players, currentPlayer, this));
+            currentPlayer = getCurrentRound().roundProceed();
+        }
+        proccedScore();
+        Player winner = players.get(0);
+        Player looser = players.get(1);
+        for (Player p : players) {
+            if (p.getScore() > winner.getScore()) {
+                winner = p;
+            }
+        }
+        for (Player p : players) {
+            if (p.getScore() < looser.getScore()) {
+                looser = p;
+            }
+        }
+        if(winner.getId()==i){
+            System.out.println("Vous avec gagné avec "+winner.getScore()+" points contre "+looser.getScore());
+        }else{
+            System.out.println("Vous avec perdu avec "+looser.getScore()+" points contre "+winner.getScore());
+        }
+        
+    }
+
     // public void undo(){
     // Round lastRound = rounds.remove(rounds.size()-1);
     // lastRound.getRoundWinner().setScore(lastRound.getRoundWinner().getScore()-lastRound.getRoundValue());
@@ -59,6 +86,11 @@ public class Game implements Serializable{
 
     // }
     // }
+    private void proccedScore(){
+        for(Round round : rounds){
+            round.getRoundWinner().setScore(round.getRoundWinner().getScore()+round.getRoundValue());
+        }
+    }
 
     public void undo() {
         // System.out.println(rounds.size());
@@ -207,5 +239,7 @@ public class Game implements Serializable{
         infoset.setTable(currentPlayer.getTable());
         return infoset;
     }
+
+    
 
 }
