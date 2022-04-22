@@ -15,16 +15,14 @@ public class Noeud {
     private List<Double> strategy;
     private List<Double> sumStrategy;
     private Game game;
-    private final int NUM_ACTION;
 
     
 
-    public Noeud(Game g) {
+    public Noeud(Game g,int numAction) {
         game = g;
-        NUM_ACTION = game.getDeck().getDeckSize();
-        sumRegret = new ArrayList<>(Collections.nCopies(NUM_ACTION, 0.0));
-        strategy = new ArrayList<>(Collections.nCopies(NUM_ACTION, 0.0));
-        sumStrategy = new ArrayList<>(Collections.nCopies(NUM_ACTION, 0.0));
+        sumRegret = new ArrayList<>(Collections.nCopies(numAction, 0.0));
+        strategy = new ArrayList<>(Collections.nCopies(numAction, 0.0));
+        sumStrategy = new ArrayList<>(Collections.nCopies(numAction, 0.0));
     }
 
     

@@ -23,10 +23,18 @@ public class CFR {
 
     public double training(int n) {
         double value = 0.0;
+        int pourcent=0;
         for (int i = 1; i <= n; i++) {
             // System.out.print(".......................................................................");
+            
             Player.resetNbPlayer();
             Game game = new Game(2);
+
+
+            if(i*100/n > pourcent){
+                System.out.println(pourcent+1+"%");
+                pourcent = i*100/n;
+            }
 
             // game.getPlayerById(1).setHand(0, new Carte(Hauteur.VALET, Couleur.PIQUE));
             // game.getPlayerById(1).setHand(1, new Carte(Hauteur.DAME, Couleur.CARREAU));
@@ -106,7 +114,7 @@ public class CFR {
         if (hashMap.containsKey(game.getGameInfoSet())) {
             noeud = hashMap.get(game.getGameInfoSet());
         } else {
-            noeud = new Noeud(game);
+            noeud = new Noeud(game,numAction);
             hashMap.put(game.getGameInfoSet(), noeud);
         }
         List<Double> strategy = getStrategy(noeud.getSumRegret());
