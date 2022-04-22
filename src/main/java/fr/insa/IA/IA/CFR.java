@@ -92,7 +92,7 @@ public class CFR {
     public double cfr(Game game, int idPlayer, double pi, double po) {
 
         if (game.isOver()){
-            System.out.println(game.payoff(game.getPlayerById(idPlayer)));
+            // System.out.println(game.payoff(game.getPlayerById(idPlayer)));
             return game.payoff(game.getPlayerById(idPlayer));
         }
             
