@@ -1,12 +1,13 @@
 package fr.insa.IA.Cartes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Carte implements Comparable<Carte> {
+public class Carte implements Comparable<Carte>, Serializable {
     
     private Hauteur hauteur;
     private Couleur couleur;

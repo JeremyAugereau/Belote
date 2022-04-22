@@ -49,8 +49,10 @@ public class App {
 
 
         CFR bot = new CFR();
-        System.out.println(bot.training(10000));
+        System.out.println(bot.training(10));
 
+        //test d'import du modele 
+        bot.importMap("modele_serialized_10.ser");
         
         
 

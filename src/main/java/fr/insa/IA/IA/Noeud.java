@@ -1,5 +1,6 @@
 package fr.insa.IA.IA;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +10,7 @@ import fr.insa.IA.Game.Game;
 import fr.insa.IA.Game.Round.Coup;
 import fr.insa.IA.Player.Player;
 
-public class Noeud {
+public class Noeud implements Serializable{
 
     private List<Double> sumRegret;
     private List<Double> strategy;

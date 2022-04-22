@@ -1,5 +1,6 @@
 package fr.insa.IA.Game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import fr.insa.IA.Cartes.Deck;
 import fr.insa.IA.IA.InfoSet;
 import fr.insa.IA.Player.Player;
 
-public class Game {
+public class Game implements Serializable{
     private List<Player> players;
     private Deck deck;
     private List<Round> rounds;

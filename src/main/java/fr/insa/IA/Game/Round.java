@@ -1,5 +1,6 @@
 package fr.insa.IA.Game;
 
+import java.io.Serializable;
 import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import fr.insa.IA.Player.Player;
 /**
  * Un Round c'est un pli
  */
-public class Round {
+public class Round implements Serializable{
 
     public class Coup {
         private Player player;

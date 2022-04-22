@@ -1,6 +1,12 @@
 package fr.insa.IA.IA;
-
-import java.lang.ProcessHandle.Info;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,13 +61,80 @@ public class CFR {
             value += cfr(game, 1, 1.0, 1.0);
         }
         
-        for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
-            if(entry.getKey().getHistory().size()==0){
-                System.out.println(entry.getKey().toString() + entry.getValue().toString());
+        // for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
+        //     if(entry.getKey().getHistory().size()==0){
+        //         System.out.println(entry.getKey().toString() + entry.getValue().toString());
+        //     }
+        // }
+        System.out.println("Taille de la Map : "+hashMap.size());
+        // sauvegardeEnClair(String.valueOf(n));
+        sauvegarde(String.valueOf(n));
+        return value / n;
+    }
+
+    private void sauvegarde(String name) {
+        try {
+            FileOutputStream file= new FileOutputStream("modele_serialized_"+name+".ser");
+  
+            ObjectOutputStream output= new ObjectOutputStream(file);
+  
+            output.writeObject(hashMap);
+            output.close();
+            file.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
+    }
+
+    public void importMap(String path){
+        try {
+            FileInputStream file = new FileInputStream(path);
+            ObjectInputStream input= new ObjectInputStream(file);
+  
+            hashMap = (HashMap)input.readObject();
+  
+            input.close();
+            file.close();
+        }
+  
+        catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+  
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return;
+        }
+  
+        System.out.println("HashMap chargée");
+    }
+    // non utilisée mais peut etre pratique pour observer ce qu'il y a dans la map
+    private void sauvegardeEnClair(String name) {
+        String outputFilePath= "modele_"+name+".txt";
+        File file = new File(outputFilePath);
+        BufferedWriter bf = null;
+  
+        try {
+            bf = new BufferedWriter(new FileWriter(file));
+            for (Map.Entry<InfoSet, Noeud> entry :hashMap.entrySet()) {
+                bf.write(entry.getKey() + ":"+ entry.getValue());
+                bf.newLine();
+            }
+            bf.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                bf.close();
+            }
+            catch (Exception e) {
             }
         }
-        System.out.println("Taille de la Map : "+hashMap.size());
-        return value / n;
+    
     }
 
     public List<Double> getStrategy(List<Double> array) {

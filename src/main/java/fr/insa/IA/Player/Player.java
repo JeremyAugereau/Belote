@@ -1,11 +1,12 @@
 package fr.insa.IA.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.insa.IA.Cartes.Carte;
 
-public class Player {
+public class Player implements Serializable{
     public final static int HAND_SIZE = 2;
     public final static int TABLE_SIZE = 1;
     public final static int SECRET_SIZE = 1;

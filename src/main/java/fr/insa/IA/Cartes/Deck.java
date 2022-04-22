@@ -1,12 +1,13 @@
 package fr.insa.IA.Cartes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import fr.insa.IA.Player.Player;
 
-public class Deck {
+public class Deck implements Serializable{
 
     private List<Carte> deck;
     private int deckSize;

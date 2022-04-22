@@ -1,11 +1,12 @@
 package fr.insa.IA.IA;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.insa.IA.Cartes.Carte;
 
-public class InfoSet {
+public class InfoSet implements Serializable{
     private List<Carte> history;
     private List<Carte> hand;
     private List<Carte> table;
