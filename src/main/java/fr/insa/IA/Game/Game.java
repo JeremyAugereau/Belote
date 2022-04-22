@@ -198,7 +198,11 @@ public class Game {
             }
         }
         infoset.setHand(currentPlayer.getHand());
-        infoset.setHistory(history);
+        List<Carte> h = new ArrayList<>();
+        for(Round.Coup c : getCurrentRound().getPli()){
+            h.add(c.getCarte());
+        }
+        infoset.setHistory(h);
         infoset.setTable(currentPlayer.getTable());
         return infoset;
     }

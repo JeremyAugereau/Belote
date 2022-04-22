@@ -30,25 +30,27 @@ public class InfoSet {
     }
     @Override
     public String toString() {
-        String res="hand:(";
+        String res="{hand:(";
         for(Carte carte : hand){
             res += carte.getHauteur().toString()+carte.getCouleur().toString()+",";
         }
-        res+="),table";
+        res+="),table:(";
         for(Carte carte : table){
             res += carte.getHauteur().toString()+carte.getCouleur().toString()+",";
         }
-        res+="),enemyT";
+        res+="),enemyT:(";
         for(Carte carte : enemyTable){
             res += carte.getHauteur().toString()+carte.getCouleur().toString()+",";
         }
         if(currentCarte != null){
-            res+="),currentC:"+currentCarte.getHauteur().toString()+currentCarte.getCouleur().toString()+",hist(";
+            res+="),currentC:"+currentCarte.getHauteur().toString()+currentCarte.getCouleur().toString()+",hist:(";
+        }else{
+            res+="),currentC:() ,hist:(";
         }
-        res+="),currentC:() ,hist(";
         for(Carte carte : history){
             res += carte.getHauteur().toString()+carte.getCouleur().toString()+",";
         }
+        res+=")}";
         return res;
     }
 

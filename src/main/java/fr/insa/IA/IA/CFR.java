@@ -1,5 +1,6 @@
 package fr.insa.IA.IA;
 
+import java.lang.ProcessHandle.Info;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -46,7 +47,11 @@ public class CFR {
             value += cfr(game, 1, 1.0, 1.0);
         }
         System.out.println("Taille de la Map : "+hashMap.size());
-        System.out.println(hashMap);
+        for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
+            if(entry.getKey().getHistory().size()!=0||true){
+                System.out.println(entry.getKey().toString() + entry.getValue().toString());
+            }
+        }
         return value / n;
     }
 
