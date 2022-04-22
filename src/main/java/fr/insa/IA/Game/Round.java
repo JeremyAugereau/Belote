@@ -146,6 +146,7 @@ public class Round {
         if (pli.isEmpty() || pli.size() == players.size()) {
             return playableCartes;
         }
+
         if (pli.size() > players.size())
             throw new IllegalArgumentException(); // juste au cas où
 
@@ -159,14 +160,14 @@ public class Round {
             if (c.player == player) {
                 throw new IllegalArgumentException();
             }
-            if (pli.get(0).carte == null)
-                System.out.println("OUILLE");
+            // if (pli.get(0).carte == null)
+            //     System.out.println("OUILLE");
             Couleur mustCoul = pli.get(0).carte.getCouleur();
             playableCartes.removeIf(crt -> {
-                if (crt == null) {
-                    System.out.println("AIE");
-                    return true;
-                }
+                // if (crt == null) {
+                //     System.out.println("AIE");
+                //     return true;
+                // }
                 return crt.getCouleur() != mustCoul;
             });
         }

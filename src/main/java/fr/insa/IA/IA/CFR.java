@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import fr.insa.IA.Cartes.Carte;
+import fr.insa.IA.Cartes.Couleur;
+import fr.insa.IA.Cartes.Hauteur;
 import fr.insa.IA.Game.Game;
 import fr.insa.IA.Game.Round;
 import fr.insa.IA.Player.Player;
@@ -22,6 +24,17 @@ public class CFR {
         for (int i = 1; i <= n; i++) {
             System.out.print(".");
             Game game = new Game(2);
+
+            game.getPlayerById(1).setHand(0, new Carte(Hauteur.VALET, Couleur.PIQUE));
+            game.getPlayerById(1).setHand(1, new Carte(Hauteur.DAME, Couleur.CARREAU));
+            game.getPlayerById(1).setTable(0, new Carte(Hauteur.AS, Couleur.PIQUE));
+            game.getPlayerById(1).setSecret(0, new Carte(Hauteur.ROI, Couleur.PIQUE));
+
+            game.getPlayerById(2).setHand(0, new Carte(Hauteur.AS, Couleur.CARREAU));
+            game.getPlayerById(2).setHand(1, new Carte(Hauteur.ROI, Couleur.CARREAU));
+            game.getPlayerById(2).setTable(0, new Carte(Hauteur.DAME, Couleur.PIQUE));
+            game.getPlayerById(2).setSecret(0, new Carte(Hauteur.VALET, Couleur.CARREAU));
+
             for (Player p : game.getPlayers()) {
                 System.out.println(p);
                 Carte.printCards(p.getHand());
@@ -70,7 +83,7 @@ public class CFR {
 
         if (game.isOver())
             return game.payoff(game.getPlayerById(idPlayer));
-        if (game.getRounds().size() == 0) {
+        if (game.getRounds().size() == 0) { // IL NE FAUT JAMAIS QUE rounds SOIT VIDE
             game.addRound(new Round(game.getPlayers(), game.getCurrentPlayer(), game));
         }
         Round round = game.getCurrentRound();

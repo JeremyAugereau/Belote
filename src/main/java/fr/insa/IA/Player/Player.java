@@ -113,6 +113,10 @@ public class Player {
         hand.add(c);
     }
 
+    public void setHand(int i,Carte c) {
+        hand.set(i, c);
+    }
+
     /**
      * Retourne les cartes face visible du joueur
      * 

@@ -71,7 +71,9 @@ public class Game {
         if (lastRound.getPli().size() == 2) {
             c = lastRound.getPli().remove(1);
         } else if (lastRound.getPli().size() == 1) {
-            rounds.remove(rounds.size() - 1);
+            if (rounds.size() > 1) { // IL NE FAUT JAMAIS QUE rounds SOIT VIDE
+                rounds.remove(lastRound);
+            }
             c = lastRound.getPli().remove(0);
         } else if (lastRound.getPli().size() == 0) {
             rounds.remove(rounds.size() - 1);
@@ -80,7 +82,7 @@ public class Game {
         } else {
             throw new IllegalArgumentException();
         }
-        
+
         Carte cartePlayed = c.getCarte();
         Player player = c.getPlayer();
         int estDeLaMain = c.getEstDeLaMain();
@@ -109,7 +111,11 @@ public class Game {
             round.actionProceed(currentPlayer, carte);
             history.add(carte);
         } else if (round.getPli().size() == 0) { // ne sert qu'au tout début
-            System.out.println("*********************************************************");
+            System.out.println("#####################################");
+
+            // System.out.println("------------------------------------------");
+            // Carte.printCards(currentPlayer.getKnownCards());
+            // System.out.println("------------------------------------------");
             System.out.println(currentPlayer);
             Carte.printCards(carte);
             round.actionProceed(currentPlayer, carte);
@@ -181,8 +187,8 @@ public class Game {
 
     public InfoSet getGameInfoSet() {
         InfoSet infoset = new InfoSet();
-        if (!currentRound.getPli().isEmpty()) {
-            infoset.setCurrentCarte(currentRound.getPli().get(0).getCarte());
+        if (getCurrentRound().getPli().size() == 1) {
+            infoset.setCurrentCarte(getCurrentRound().getPli().get(0).getCarte());
         } else {
             infoset.setCurrentCarte(null);
         }
