@@ -15,13 +15,11 @@ public class Noeud {
     private List<Double> strategy;
     private List<Double> sumStrategy;
     private Game game;
-    private InfoSet infoSet;
     private final int NUM_ACTION;
 
     
 
     public Noeud(Game g) {
-        infoSet = new InfoSet();
         game = g;
         NUM_ACTION = game.getDeck().getDeckSize();
         sumRegret = new ArrayList<>(Collections.nCopies(NUM_ACTION, 0.0));
@@ -30,7 +28,10 @@ public class Noeud {
     }
 
     
-    
+    @Override
+    public String toString() {
+        return sumStrategy.toString();
+    }
     public List<Double> getSumRegret() {
         return sumRegret;
     }

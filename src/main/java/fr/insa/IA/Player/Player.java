@@ -25,6 +25,10 @@ public class Player {
         nbPlayer++;
     }
 
+    public static void resetNbPlayer(){
+        nbPlayer =1;
+    }
+
     /**
      * Retourne l'id du joueur
      * 

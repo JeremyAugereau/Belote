@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.insa.IA.Cartes.Carte;
 import fr.insa.IA.Cartes.Couleur;
@@ -22,18 +23,19 @@ public class CFR {
     public double training(int n) {
         double value = 0.0;
         for (int i = 1; i <= n; i++) {
-            System.out.print(".");
+            System.out.print(".......................................................................");
+            Player.resetNbPlayer();
             Game game = new Game(2);
 
-            game.getPlayerById(1).setHand(0, new Carte(Hauteur.VALET, Couleur.PIQUE));
-            game.getPlayerById(1).setHand(1, new Carte(Hauteur.DAME, Couleur.CARREAU));
-            game.getPlayerById(1).setTable(0, new Carte(Hauteur.AS, Couleur.PIQUE));
-            game.getPlayerById(1).setSecret(0, new Carte(Hauteur.ROI, Couleur.PIQUE));
+            // game.getPlayerById(1).setHand(0, new Carte(Hauteur.VALET, Couleur.PIQUE));
+            // game.getPlayerById(1).setHand(1, new Carte(Hauteur.DAME, Couleur.CARREAU));
+            // game.getPlayerById(1).setTable(0, new Carte(Hauteur.AS, Couleur.PIQUE));
+            // game.getPlayerById(1).setSecret(0, new Carte(Hauteur.ROI, Couleur.PIQUE));
 
-            game.getPlayerById(2).setHand(0, new Carte(Hauteur.AS, Couleur.CARREAU));
-            game.getPlayerById(2).setHand(1, new Carte(Hauteur.ROI, Couleur.CARREAU));
-            game.getPlayerById(2).setTable(0, new Carte(Hauteur.DAME, Couleur.PIQUE));
-            game.getPlayerById(2).setSecret(0, new Carte(Hauteur.VALET, Couleur.CARREAU));
+            // game.getPlayerById(2).setHand(0, new Carte(Hauteur.AS, Couleur.CARREAU));
+            // game.getPlayerById(2).setHand(1, new Carte(Hauteur.ROI, Couleur.CARREAU));
+            // game.getPlayerById(2).setTable(0, new Carte(Hauteur.DAME, Couleur.PIQUE));
+            // game.getPlayerById(2).setSecret(0, new Carte(Hauteur.VALET, Couleur.CARREAU));
 
             for (Player p : game.getPlayers()) {
                 System.out.println(p);
@@ -43,6 +45,8 @@ public class CFR {
             }
             value += cfr(game, 1, 1.0, 1.0);
         }
+        System.out.println("Taille de la Map : "+hashMap.size());
+        System.out.println(hashMap);
         return value / n;
     }
 

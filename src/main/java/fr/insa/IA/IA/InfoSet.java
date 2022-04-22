@@ -42,7 +42,10 @@ public class InfoSet {
         for(Carte carte : enemyTable){
             res += carte.getHauteur().toString()+carte.getCouleur().toString()+",";
         }
-        res+="),currentC:"+currentCarte.getHauteur().toString()+currentCarte.getCouleur().toString()+",hist(";
+        if(currentCarte != null){
+            res+="),currentC:"+currentCarte.getHauteur().toString()+currentCarte.getCouleur().toString()+",hist(";
+        }
+        res+="),currentC:() ,hist(";
         for(Carte carte : history){
             res += carte.getHauteur().toString()+carte.getCouleur().toString()+",";
         }
