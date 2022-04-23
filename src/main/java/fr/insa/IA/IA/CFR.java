@@ -28,20 +28,19 @@ public class CFR implements Serializable{
 
     public double training(int n) {
         double value = 0.0;
-        int pourcent=0;
+        int pourcent=0;       
+        String msg ="";   
         for (int i = 1; i <= n; i++) {
-            
             Player.resetNbPlayer();
             Game game = new Game(2);
-
-
             if(i*100/n > pourcent){
-                System.out.println(pourcent+1+"%");
-                pourcent = i*100/n;
+                msg = "|"+"=".repeat(pourcent/2+1)+" ".repeat((100-pourcent)/2-1)+"|\r";               
+                pourcent = i*100/n+1;
+                System.out.print(msg);
             }
             value += cfr(game, 1, 1.0, 1.0);
         }
-       
+        System.out.println("");
         System.out.println("Taille de la Map : "+hashMap.size());
         sauvegarde(String.valueOf(n));
         System.out.println("HashMap sauvegardée");

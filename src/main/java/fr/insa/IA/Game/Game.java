@@ -33,7 +33,7 @@ public class Game implements Serializable{
 
     public void proceedGame() {
         while(!isOver()){
-            System.out.println("*********New Round***********");
+            System.out.println("******************New Round******************");
             addRound(new Round(players, currentPlayer, this));
             getCurrentRound().roundProceed();
         }
