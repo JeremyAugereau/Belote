@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import fr.insa.IA.Game.Game;
 import fr.insa.IA.Game.Round;
 import fr.insa.IA.Player.Player;
 
-public class CFR {
+public class CFR implements Serializable{
     private HashMap<InfoSet, Noeud> hashMap;
 
     public CFR() {
@@ -62,14 +63,15 @@ public class CFR {
             value += cfr(game, 1, 1.0, 1.0);
         }
         
-        for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
-            if(entry.getKey().getHistory().size()==0){
-                System.out.println(entry.getKey().toString() + entry.getValue().toString());
-            }
-        }
+        // for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
+        //     if(entry.getKey().getHistory().size()==0){
+        //         System.out.println(entry.getKey().toString() + entry.getValue().toString());
+        //     }
+        // }
         System.out.println("Taille de la Map : "+hashMap.size());
         // sauvegardeEnClair(String.valueOf(n));
-        sauvegardeEnClair(String.valueOf(n));
+        sauvegarde(String.valueOf(n));
+        System.out.println("HashMap sauvegardée");
         return value / n;
     }
 
@@ -90,6 +92,7 @@ public class CFR {
 
     public void importMap(String path) throws IOException{
         try {
+            System.out.println("Chargement de la HashMap ...");
             FileInputStream file = new FileInputStream(path);
             ObjectInputStream input= new ObjectInputStream(file);
   
@@ -106,11 +109,11 @@ public class CFR {
   
         System.out.println("HashMap chargée");
 
-        for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
-            if(entry.getKey().getHistory().size()==0){
-                System.out.println(entry.getKey().toString() + entry.getValue().toString());
-            }
-        }
+        // for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
+        //     if(entry.getKey().getHistory().size()==0){
+        //         System.out.println(entry.getKey().toString() + entry.getValue().toString());
+        //     }
+        // }
     }
     // non utilisée mais peut etre pratique pour observer ce qu'il y a dans la map
     private void sauvegardeEnClair(String name) {
