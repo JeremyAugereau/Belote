@@ -6,17 +6,69 @@ import java.util.List;
 
 import fr.insa.IA.Cartes.Carte;
 
-public class Player implements Serializable{
+/**
+ * A Player of our simplified Belote. A player can be a human or the AI.
+ * 
+ * @author AUGEREAU Jeremy
+ * @author GRAC Guilhem
+ */
+public class Player implements Serializable {
+    /**
+     * Number of cards the player's hand can hold.
+     */
     public final static int HAND_SIZE = 2;
+    /**
+     * Number of cards the player's table can hold.
+     */
     public final static int TABLE_SIZE = 1;
-    public final static int SECRET_SIZE = 1;
+    /**
+     * Number of players in a game.
+     * 
+     * @see #id
+     */
     private static int nbPlayer = 1;
+    /**
+     * List of {@link #HAND_SIZE} cards, composing the player's hand.
+     * 
+     * @see Carte
+     */
     private List<Carte> hand;
+    /**
+     * List of {@link #TABLE_SIZE} cards, composing the player's table.
+     * These cards can only be played by this player but can be seen by all the
+     * players within the same game.
+     * 
+     * @see Carte
+     */
     private List<Carte> table;
+    /**
+     * List of {@link #TABLE_SIZE} cards, composing the player's secret.
+     * When a {@link #table} card is played, the correspond secret card (the one
+     * with the same index) takes its place.
+     * 
+     * @see Carte
+     */
     private List<Carte> secret;
+    /**
+     * Score of the player. The score is calculated with the value
+     * ({@link Carte#getHauteur()}) of each card within a round this player has won.
+     * It is computed at the end of the game.
+     * 
+     * @see Carte
+     */
     private int score;
+    /**
+     * Id of the player. Starts at 1.
+     * 
+     * @see #nbPlayer
+     */
     private int id;
 
+    /**
+     * Constructor of Player. Initialize {@link #hand}, {@link #table}, and
+     * {@link #secret}, gives an id to the player, and increment {@link #nbPlayer}
+     * by 1.
+     */
     public Player() {
         score = 0;
         hand = new ArrayList<Carte>();
@@ -26,28 +78,36 @@ public class Player implements Serializable{
         nbPlayer++;
     }
 
-    public static void resetNbPlayer(){
-        nbPlayer =1;
+    /**
+     * Reset {@link #nbPlayer} to 1. Notably used when creating a new game.
+     */
+    public static void resetNbPlayer() {
+        nbPlayer = 1;
     }
 
     /**
-     * Retourne l'id du joueur
+     * Getter of {@link #id}, the id of the player.
      * 
-     * @return int
+     * @return (int) the id
      */
     public int getId() {
         return id;
     }
 
     /**
-     * retourne le nombre de joueur
+     * Getter of {@link #nbPlayer}, the number of players.
      * 
-     * @return int
+     * @return (int)
      */
     public int getNbPlayer() {
         return nbPlayer;
     }
 
+    /**
+     * @return (List of cards) concatenation of his {@link #hand} and his
+     *         {@link #table}.
+     * @see Carte
+     */
     public List<Carte> getKnownCards() {
         List<Carte> res = new ArrayList<>();
         for (Carte c : hand) {
@@ -58,19 +118,17 @@ public class Player implements Serializable{
             if (c != null)
                 res.add(c);
         }
-        // for (Carte c : secret) {
-        // res.add(c);
-        // }
         return res;
     }
 
     /**
-     * Supprime une carte du jeu d'un joueur et la retourne
+     * Removes a card from the player's {@link #hand} or {@link #table}.
      * 
-     * @param c Carte à supprimer
-     * @return Carte supprimée
+     * @param c Card to remove
+     * @see Carte
+     * @throws IllegalArgumentException if the player does not have this card
      */
-    public Carte removeCarte(Carte c) {
+    public void removeCarte(Carte c) {
         if (hand.contains(c)) {
             hand.remove(c);
         } else if (table.contains(c)) {
@@ -80,24 +138,13 @@ public class Player implements Serializable{
         } else {
             throw new IllegalArgumentException();
         }
-        return c;
-    }
-
-    public int nbCartes() {
-        int tableSize = 0;
-        for (int i = 0; i < table.size(); i++) {
-            if (table.get(i) != null) {
-                tableSize++;
-            }
-        }
-
-        return hand.size() + tableSize;
     }
 
     /**
-     * Retourne les cartes dans la main du joueur
+     * Getter of the player's {@link #hand}.
      * 
-     * @return List<Carte> return the hand
+     * @return List of cards, the player's hand
+     * @see Carte
      */
     public List<Carte> getHand() {
         return hand;
@@ -105,76 +152,105 @@ public class Player implements Serializable{
 
     @Override
     public String toString() {
-
         return "Player " + id;
     }
 
     /**
-     * Ajoute une carte à la main du joueur
+     * Add a cards to the player's {@link #hand}.
      * 
-     * @param hand the hand to set
+     * @param c ({@link Carte}) card to add
+     * @see Carte
      */
     public void addHand(Carte c) {
         hand.add(c);
     }
 
-    public void setHand(int i,Carte c) {
+    /**
+     * Setter of the player's {@link #hand}.
+     * 
+     * @param i (int) index to where add the card in the hand.
+     * @param c ({@link Carte}) card to add
+     * @see Carte
+     */
+    public void setHand(int i, Carte c) {
         hand.set(i, c);
     }
 
     /**
-     * Retourne les cartes face visible du joueur
+     * Getter of {@link #table}.
      * 
-     * @return List<Carte> return the table
+     * @return List of cards, the player's table
+     * @see Carte
      */
     public List<Carte> getTable() {
         return table;
     }
 
     /**
-     * Ajoute une carte face visible au joueur
+     * Add a cards to the player's {@link #table}.
      * 
-     * @param table the table to set
+     * @param c ({@link Carte}) card to add
+     * @see Carte
      */
     public void addTable(Carte c) {
         table.add(c);
     }
 
+    /**
+     * Setter of the player's {@link #table}.
+     * 
+     * @param i (int) index to where add the card in the table.
+     * @param c ({@link Carte}) card to add
+     * @see Carte
+     */
     public void setTable(int i, Carte c) {
         table.set(i, c);
     }
 
     /**
-     * Retourne les cartes face cachée du joueur
+     * Getter of {@link #secret}.
      * 
-     * @return List<Carte> return the secret
+     * @return List of cards, the player's secret
+     * @see Carte
      */
     public List<Carte> getSecret() {
         return secret;
     }
 
     /**
-     * Ajoute une carte face cachée au joueur
+     * Add a cards to the player's {@link #secret}.
      * 
-     * @param secret the secret to set
+     * @param c ({@link Carte}) card to add
+     * @see Carte
      */
     public void addSecret(Carte c) {
         secret.add(c);
     }
 
+    /**
+     * Setter of the player's {@link #secret}.
+     * 
+     * @param i (int) index to where add the card in the secret.
+     * @param c ({@link Carte}) card to add
+     * @see Carte
+     */
     public void setSecret(int i, Carte c) {
         secret.set(i, c);
     }
 
     /**
-     * @return int retourne le score
+     * Score of the player. The score is calculated with the value
+     * ({@link Carte#getHauteur()}) of each card within a round this player has won.
+     * 
+     * @return (int) {@link #score}
      */
     public int getScore() {
         return score;
     }
 
     /**
-     * @param score set le score du joueur
+     * Setter of {@link #score}.
+     * @param score (int) new score
      */
     public void setScore(int score) {
         this.score = score;
