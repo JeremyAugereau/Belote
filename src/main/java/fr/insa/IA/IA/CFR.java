@@ -149,7 +149,7 @@ public class CFR implements Serializable{
         }
             
         if (game.getRounds().size() == 0) { // IL NE FAUT JAMAIS QUE rounds SOIT VIDE
-            game.addRound(new Round(game.getPlayers(), game.getCurrentPlayer(), game));
+            game.addRound(new Round(game));
         }
         Round round = game.getCurrentRound();
         List<Carte> actions = round.getPlayableCard(game.getPlayerById(idPlayer));

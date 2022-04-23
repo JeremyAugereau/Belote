@@ -8,7 +8,7 @@ public class Carte implements Comparable<Carte>, Serializable {
 
     private Hauteur hauteur;
     private Couleur couleur;
-
+    
     /**
      * @param h hauteur de la carte (voir enum HAUTEUR)
      * @param c couleur de la carte (voir enum COULEUR)

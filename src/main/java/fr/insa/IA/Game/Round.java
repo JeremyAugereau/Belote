@@ -10,7 +10,8 @@ import fr.insa.IA.Cartes.Couleur;
 import fr.insa.IA.Player.Player;
 
 /**
- * A Round of our simplified Belote. In a round, each player plays 1 card, modelized by a
+ * A Round of our simplified Belote. In a round, each player plays 1 card,
+ * modelized by a
  * "coup".
  * 
  * @see Coup
@@ -19,7 +20,6 @@ import fr.insa.IA.Player.Player;
  * @author GRAC Guilhem
  */
 public class Round implements Serializable {
-
 
     /**
      * A Coup represent a card played by a player within a Round.
@@ -124,8 +124,6 @@ public class Round implements Serializable {
 
     }
 
-    private Player firstPlayer;
-    private List<Player> players;
     /**
      * List of Coup composing the round. There can be 0, 1, or 2 "coups" within.
      * 
@@ -139,14 +137,22 @@ public class Round implements Serializable {
      */
     private Game game;
 
-    public Round(List<Player> plist, Player player, Game game) {
-        players = plist;
+    /**
+     * Constructor of Round.
+     * 
+     * @param game ({@link Game}) from where the round is played
+     */
+    public Round(Game game) {
         this.game = game;
-        firstPlayer = player;
         pli = new ArrayList<>();
     }
 
-
+    /**
+     * Proceed a round.
+     * 
+     * @see #actionProceed()
+     * @see #botActionProceed()
+     */
     public void roundProceed() {
         while (pli.size() < 2) {
 
@@ -160,6 +166,13 @@ public class Round implements Serializable {
         }
     }
 
+    /**
+     * Makes the bot play a card, creating a Coup.
+     * Used by the bot when is playing the game.
+     * 
+     * @see CFR
+     * @see Coup
+     */
     private void botActionProceed() {
         Player player = game.getCurrentPlayer();
         Carte cartePlayed = game.getBot().chooseAction(game);
@@ -170,9 +183,12 @@ public class Round implements Serializable {
         }
         Carte.printCards(cartePlayed);
         player.removeCarte(cartePlayed);
-
     }
 
+    /**
+     * Ask a human player to play a card, by entering a number into the console, creating a Coup.
+     * @see Coup
+     */
     public void actionProceed() {
         Player player = game.getCurrentPlayer();
         System.out.println("Pli en cours :");
@@ -200,6 +216,14 @@ public class Round implements Serializable {
         player.removeCarte(cartePlayed);
     }
 
+    /**
+     * Makes the bot play a card, creating a Coup.
+     * Used by the bot when is training. 
+     * @param player ({@link Player}) controlled by the bot
+     * @param carte ({@link Carte}) card chosen / played by the bot
+     * @see CFR
+     * @see Coup
+     */
     public void actionProceed(Player player, Carte carte) {
         if (!(getPlayableCard(player).contains(carte))) {
             throw new IllegalArgumentException();
@@ -214,28 +238,39 @@ public class Round implements Serializable {
 
     }
 
+    /**
+     * Finds who the next player who has to play is.
+     * @return ({@link Player})
+     * @see Player
+     */
     public Player nextCurrentPlayer() {
-        if (pli.size() == players.size()) {
+        if (pli.size() == game.getPlayers().size()) {
             return getRoundWinner();
         } else {
-            for (Player p : players) {
+            for (Player p : game.getPlayers()) {
                 if (game.getCurrentPlayer().getId() != p.getId()) {
                     return p;
                 }
             }
-            return game.getPlayerById((game.getCurrentPlayer().getId() % players.size()) + 1);
+            return game.getPlayerById((game.getCurrentPlayer().getId() % game.getPlayers().size()) + 1);
         }
     }
 
+    /**
+     * Finds which cards can be played by a player, according to the current round, and the cards already played by the other players.
+     * @param player ({@link Player})
+     * @return (List of cards) the playable cards
+     * @see Carte
+     */
     public List<Carte> getPlayableCard(Player player) {
         List<Carte> playableCartes = new ArrayList<>();
         playableCartes = player.getKnownCards();
 
-        if (pli.isEmpty() || pli.size() == players.size()) {
+        if (pli.isEmpty() || pli.size() == game.getPlayers().size()) {
             return playableCartes;
         }
 
-        if (pli.size() > players.size())
+        if (pli.size() > game.getPlayers().size())
             throw new IllegalArgumentException(); // juste au cas où
 
         for (Coup c : pli) {
@@ -250,9 +285,15 @@ public class Round implements Serializable {
             playableCartes = player.getKnownCards();
         }
         return playableCartes;
-
     }
 
+    /**
+     * Finds which player has won the round.
+     * Compares the cards within {@link #pli} to find the strongest one. 
+     * @return ({@link Player}) the winner
+     * @see Player
+     * @see Carte
+     */
     public Player getRoundWinner() {
         Couleur currentCouleur = pli.get(0).carte.getCouleur();
         Carte currentCarteWinner = pli.get(0).carte;
@@ -266,6 +307,11 @@ public class Round implements Serializable {
         return roundWinner;
     }
 
+    /**
+     * Computes the total points value of the round, by adding the values of each card
+     * @return (int) the value
+     * @see Carte
+     */
     public int getRoundValue() {
         int score = 0;
         for (Coup coup : pli) {
@@ -274,10 +320,18 @@ public class Round implements Serializable {
         return score;
     }
 
+    /**
+     * Getter of {@link #pli}.
+     * @return (List of {@link Coup})
+     */
     public List<Coup> getPli() {
         return pli;
     }
 
+    /**
+     * Removes the specified Coup from {@link #pli}.
+     * @param c ({@link Coup}) to be removed
+     */
     public void removeCoup(Coup c) {
         pli.remove(c);
     }

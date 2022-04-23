@@ -13,13 +13,14 @@ public class App {
 
         Game game = new Game(2);
         CFR bot = new CFR();
+        game.setBot(bot);
         try{
             bot.importMap("modele_serialized_1000.ser");
         }catch(IOException e){
             System.out.println("Fichier introuvale, training du bot ...");
             bot.training(1000);
         }
-        //game.proceedGame();
+        game.proceedGame();
       
         // Pour lancer le programme les paramètres sont " nbIteration JoueurSouhaité(p1 ou p2)"
         // game.setBot(bot);
