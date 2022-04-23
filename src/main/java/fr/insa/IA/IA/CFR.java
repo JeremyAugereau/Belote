@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import fr.insa.IA.Cartes.Carte;
 import fr.insa.IA.Cartes.Couleur;
@@ -61,14 +62,14 @@ public class CFR {
             value += cfr(game, 1, 1.0, 1.0);
         }
         
-        // for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
-        //     if(entry.getKey().getHistory().size()==0){
-        //         System.out.println(entry.getKey().toString() + entry.getValue().toString());
-        //     }
-        // }
+        for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
+            if(entry.getKey().getHistory().size()==0){
+                System.out.println(entry.getKey().toString() + entry.getValue().toString());
+            }
+        }
         System.out.println("Taille de la Map : "+hashMap.size());
         // sauvegardeEnClair(String.valueOf(n));
-        sauvegarde(String.valueOf(n));
+        sauvegardeEnClair(String.valueOf(n));
         return value / n;
     }
 
@@ -249,5 +250,26 @@ public class CFR {
             updateStrategySum(noeud, strategy, po);
         }
         return node_util;
+    }
+
+    public Carte chooseAction(Game game) {
+        InfoSet info = game.getGameInfoSet();
+        if(hashMap.containsKey(info)){
+            double sum = 0.0;
+            List<Double> list =hashMap.get(info).getSumStrategy();
+            for(Double d : list){
+                sum += d;
+            }
+            double random = Math.random() * sum;
+            double sommeCumul =0.0;
+            for(int i =0;i<list.size();i++){
+                sommeCumul += list.get(i);
+                if(random<=sommeCumul) return game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).get(i);
+            }
+            return game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).get(list.size()-1);                           //ça devrait jamais arriver mais au cas ou;
+        }else{
+            int random = (int) Math.random() * game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).size(); 
+            return game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).get(random);
+        }
     }
 }

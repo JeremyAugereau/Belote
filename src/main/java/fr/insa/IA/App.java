@@ -1,21 +1,8 @@
 package fr.insa.IA;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import fr.insa.IA.Cartes.Carte;
-import fr.insa.IA.Cartes.Couleur;
-import fr.insa.IA.Cartes.Deck;
-import fr.insa.IA.Cartes.Hauteur;
 import fr.insa.IA.Game.Game;
-import fr.insa.IA.Game.Round;
 import fr.insa.IA.IA.CFR;
-import fr.insa.IA.IA.InfoSet;
-import fr.insa.IA.IA.Noeud;
-import fr.insa.IA.Player.Player;
 
 
 public class App {
@@ -51,20 +38,20 @@ public class App {
         Game game = new Game(2);
         CFR bot = new CFR();
         try{
-            bot.importMap("modele_serialized_100000.ser");
+            bot.importMap("modele_serialized_10000.ser");
         }catch(IOException e){
-            e.printStackTrace();
+            bot.training(100);
         }
-        game.proceedGame(bot,1);
+        game.proceedGame();
         
 
-        //System.out.println(bot.training(100000));
 
         //test d'import du modele 
         //bot.importMap("modele_serialized_10.ser");
 
 
         // Pour lancer le programme les paramètres sont " nbIteration JoueurSouhaité(p1 ou p2)"
+        // game.setBot(bot);
         // if(args.length !=0){
         //     int nbIteration = Integer.parseInt(args[0]);
         //     try{
@@ -75,9 +62,9 @@ public class App {
         //     if(args.length>1){
         //         if(args[1].equals("p2")){
         //             game.setCurrentPlayer(game.getPlayerById(2));
-        //             game.proceedGame(bot,2);
+        //             game.proceedGame(2);
         //         }else{
-        //             game.proceedGame(bot,1);
+        //             game.proceedGame(1);
         //         }
         //     }
         // }else{

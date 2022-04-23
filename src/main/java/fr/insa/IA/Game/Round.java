@@ -1,7 +1,6 @@
 package fr.insa.IA.Game;
 
 import java.io.Serializable;
-import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,7 +12,7 @@ import fr.insa.IA.Player.Player;
 /**
  * Un Round c'est un pli
  */
-public class Round implements Serializable{
+public class Round implements Serializable {
 
     public class Coup {
         private Player player;
@@ -70,26 +69,57 @@ public class Round implements Serializable{
         this.pli = round.pli;
     }
 
-    public Player roundProceed() {
-        Player roundWinner;
-        for (int i = players.indexOf(firstPlayer); i < players.indexOf(firstPlayer) + players.size(); i++) {
-            game.setCurrentPlayer(players.get(i % players.size()));
-            actionProceed(game.getCurrentPlayer());
+    // public Player roundProceed() {
+    // Player roundWinner;
+    // for (int i = players.indexOf(firstPlayer); i < players.indexOf(firstPlayer) +
+    // players.size(); i++) {
+    // game.setCurrentPlayer(players.get(i % players.size()));
+    // actionProceed(game.getCurrentPlayer());
+    // }
+    // roundWinner = getRoundWinner();
+    // roundWinner.setScore(roundWinner.getScore() + getRoundValue());
+    // game.addRound(this);
+    // return roundWinner;
+    // }
+
+    public void roundProceed() {
+        while (pli.size() < 2) {
+            
+            if (game.getCurrentPlayer().getId() == 1) {
+                game.printGameState();
+                actionProceed();
+            } else {
+                botActionProceed();
+            }
+            game.setCurrentPlayer(nextCurrentPlayer());
         }
-        roundWinner = getRoundWinner();
-        roundWinner.setScore(roundWinner.getScore() + getRoundValue());
-        game.addRound(this);
-        return roundWinner;
     }
 
-    public void actionProceed(Player player) {
+    private void botActionProceed() {
+        Player player = game.getCurrentPlayer();
+        Carte cartePlayed = game.getBot().chooseAction(game);
+        if (player.getHand().contains(cartePlayed)) {
+            pli.add(new Coup(player, cartePlayed, -1));
+        } else {
+            pli.add(new Coup(player, cartePlayed, player.getTable().indexOf(cartePlayed)));
+        }
+        Carte.printCards(cartePlayed);
+        player.removeCarte(cartePlayed);
+
+    }
+
+    public void actionProceed() {
+        Player player = game.getCurrentPlayer();
         System.out.println("Pli en cours :");
         List<Carte> carteToPrint = new ArrayList<>();
-        for (Coup coup : pli) {
-            carteToPrint.add(coup.carte);
-        }
-        Carte.printCards(carteToPrint);
+        if (pli.size() != 0) {
 
+            for (Coup coup : pli) {
+                carteToPrint.add(coup.carte);
+            }
+            Carte.printCards(carteToPrint);
+
+        }
         System.out.println("Tu peux jouer :");
         Carte.printCards(getPlayableCard(player));
         System.out.println("Entre le numero de ta carte : ");
@@ -101,9 +131,8 @@ public class Round implements Serializable{
         } else {
             pli.add(new Coup(player, cartePlayed, player.getTable().indexOf(cartePlayed)));
         }
-
+        Carte.printCards(cartePlayed);
         player.removeCarte(cartePlayed);
-
     }
 
     public void actionProceed(Player player, Carte carte) {
@@ -160,12 +189,12 @@ public class Round implements Serializable{
                 throw new IllegalArgumentException();
             }
             // if (pli.get(0).carte == null)
-            //     System.out.println("OUILLE");
+            // System.out.println("OUILLE");
             Couleur mustCoul = pli.get(0).carte.getCouleur();
             playableCartes.removeIf(crt -> {
                 // if (crt == null) {
-                //     System.out.println("AIE");
-                //     return true;
+                // System.out.println("AIE");
+                // return true;
                 // }
                 return crt.getCouleur() != mustCoul;
             });
