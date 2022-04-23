@@ -14,10 +14,10 @@ public class App {
         Game game = new Game(2);
         CFR bot = new CFR();
         try{
-            bot.importMap("modele_serialized_10000.ser");
+            bot.importMap("modele_serialized_5000.ser");
         }catch(IOException e){
             System.out.println("Fichier introuvale, training du bot ...");
-            bot.training(10000);
+            bot.training(5000);
         }
         game.proceedGame();
       
@@ -33,9 +33,9 @@ public class App {
         //     if(args.length>1){
         //         if(args[1].equals("p2")){
         //             game.setCurrentPlayer(game.getPlayerById(2));
-        //             game.proceedGame(2);
+        //             game.proceedGame();
         //         }else{
-        //             game.proceedGame(1);
+        //             game.proceedGame();
         //         }
         //     }
         // }else{
@@ -44,7 +44,7 @@ public class App {
         //     }catch(IOException e){
         //         bot.training(10000);
         //     }
-        //     game.proceedGame(bot,1);
+        //     game.proceedGame();
         // }
     }
 }

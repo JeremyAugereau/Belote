@@ -62,29 +62,9 @@ public class Round implements Serializable {
         pli = new ArrayList<>();
     }
 
-    public Round(Round round) {
-        this.firstPlayer = round.firstPlayer;
-        this.game = round.game;
-        this.players = round.players;
-        this.pli = round.pli;
-    }
-
-    // public Player roundProceed() {
-    // Player roundWinner;
-    // for (int i = players.indexOf(firstPlayer); i < players.indexOf(firstPlayer) +
-    // players.size(); i++) {
-    // game.setCurrentPlayer(players.get(i % players.size()));
-    // actionProceed(game.getCurrentPlayer());
-    // }
-    // roundWinner = getRoundWinner();
-    // roundWinner.setScore(roundWinner.getScore() + getRoundValue());
-    // game.addRound(this);
-    // return roundWinner;
-    // }
-
     public void roundProceed() {
         while (pli.size() < 2) {
-            
+
             if (game.getCurrentPlayer().getId() == 1) {
                 game.printGameState();
                 actionProceed();
@@ -137,11 +117,6 @@ public class Round implements Serializable {
 
     public void actionProceed(Player player, Carte carte) {
         if (!(getPlayableCard(player).contains(carte))) {
-            // System.out.println("------------------------------------------");
-            // System.out.println(player);
-            // Carte.printCards(carte);
-            // Carte.printCards(getPlayableCard(player));
-            // System.out.println("------------------------------------------");
             throw new IllegalArgumentException();
         }
         if (player.getHand().contains(carte)) {
@@ -178,26 +153,12 @@ public class Round implements Serializable {
         if (pli.size() > players.size())
             throw new IllegalArgumentException(); // juste au cas où
 
-        // System.out.println("------------------------------------------");
-        // for (Coup c : pli) {
-        // Carte.printCards(c.carte);
-        // }
-        // System.out.println("------------------------------------------");
-
         for (Coup c : pli) {
             if (c.player == player) {
                 throw new IllegalArgumentException();
             }
-            // if (pli.get(0).carte == null)
-            // System.out.println("OUILLE");
             Couleur mustCoul = pli.get(0).carte.getCouleur();
-            playableCartes.removeIf(crt -> {
-                // if (crt == null) {
-                // System.out.println("AIE");
-                // return true;
-                // }
-                return crt.getCouleur() != mustCoul;
-            });
+            playableCartes.removeIf(crt -> crt.getCouleur() != mustCoul);
         }
         if (playableCartes.isEmpty()) {
             playableCartes = player.getKnownCards();

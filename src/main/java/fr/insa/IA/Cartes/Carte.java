@@ -2,10 +2,7 @@ package fr.insa.IA.Cartes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Carte implements Comparable<Carte>, Serializable {
 
@@ -164,18 +161,5 @@ public class Carte implements Comparable<Carte>, Serializable {
     }
 
 
-    /*
-     * public static void main(String[] args) {
-     * Carte c1 = new Carte(Hauteur.A, Couleur.Pique);
-     * Carte c2 = new Carte(Hauteur.V, Couleur.Pique);
-     * Carte c3 = new Carte(Hauteur.R, Couleur.Carreau);
-     * 
-     * List<Carte> cartes = new ArrayList<>();
-     * cartes.add(c1);
-     * cartes.add(c2);
-     * cartes.add(c3);
-     * Carte.printCards(cartes);
-     * }
-     */
 
 }

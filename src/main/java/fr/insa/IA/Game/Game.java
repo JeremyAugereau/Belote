@@ -31,20 +31,6 @@ public class Game implements Serializable{
         bot = new CFR();
        }
 
-    // public void proceedGame() {
-    //     while (!isOver()) {
-    //         currentRound = new Round(players, currentPlayer, this);
-    //         currentPlayer = currentRound.roundProceed();
-    //     }
-    //     Player winner = players.get(0);
-    //     for (Player p : players) {
-    //         if (p.getScore() > winner.getScore()) {
-    //             winner = p;
-    //         }
-    //     }
-    //     System.out.println("Player " + winner.getId() + " a gagné !!!!!!");
-    // }
-
     public void proceedGame() {
         while(!isOver()){
             System.out.println("*********New Round***********");
@@ -79,9 +65,7 @@ public class Game implements Serializable{
     }
 
     public void undo() {
-        // System.out.println(rounds.size());
         Round lastRound = rounds.get(rounds.size() - 1);
-        // System.out.println(lastRound.getPli().size());
 
         Round.Coup c;
         if (lastRound.getPli().size() == 2) {
@@ -113,24 +97,12 @@ public class Game implements Serializable{
 
     public void next(Carte carte, Round round) {
         if (round.getPli().size() == 2) {
-            // System.out.println("*********************************************************");
             Round nextRound = new Round(players, currentPlayer, this);
             addRound(nextRound);
-            // System.out.println(currentPlayer);
-            // Carte.printCards(carte);
             nextRound.actionProceed(currentPlayer, carte);
         } else if (round.getPli().size() == 1) {
-            // System.out.println(currentPlayer);
-            // Carte.printCards(carte);
             round.actionProceed(currentPlayer, carte);
         } else if (round.getPli().size() == 0) { // ne sert qu'au tout début
-            //System.out.println("#####################################");
-
-            // System.out.println("------------------------------------------");
-            // Carte.printCards(currentPlayer.getKnownCards());
-            // System.out.println("------------------------------------------");
-            // System.out.println(currentPlayer);
-            // Carte.printCards(carte);
             round.actionProceed(currentPlayer, carte);
         } else {
             throw new IllegalArgumentException();
