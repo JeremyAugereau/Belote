@@ -43,6 +43,7 @@ public class Game implements Serializable {
      * @see Player
      */
     private Player currentPlayer;
+    private CFR bot;
 
     /**
      * Constructor of Game.
@@ -58,37 +59,17 @@ public class Game implements Serializable {
         deck.deal(players);
         currentPlayer = players.get(0);
         currentRound = new Round(players, currentPlayer, this);
-    }
+        bot = new CFR();
+       }
 
     /**
      * Proceed the entire game looping and creating new rounds.
-     * Used when playing human vs human
      */
     public void proceedGame() {
-        while (!isOver()) {
-            currentRound = new Round(players, currentPlayer, this);
-            currentPlayer = currentRound.roundProceed();
-        }
-        Player winner = players.get(0);
-        for (Player p : players) {
-            if (p.getScore() > winner.getScore()) {
-                winner = p;
-            }
-        }
-        System.out.println("Player " + winner.getId() + " a gagné !!!!!!");
-    }
-
-    /**
-     * Proceed the entire game.
-     * Human vs AI
-     * 
-     * @param bot bot to play against
-     * @param i   player's id the human wants to play
-     */
-    public void proceedGame(CFR bot, int i) {
-        while (!isOver()) {
+        while(!isOver()){
+            System.out.println("******************New Round******************");
             addRound(new Round(players, currentPlayer, this));
-            currentPlayer = getCurrentRound().roundProceed();
+            getCurrentRound().roundProceed();
         }
         proccedScore();
         Player winner = players.get(0);
@@ -103,11 +84,12 @@ public class Game implements Serializable {
                 looser = p;
             }
         }
-        if (winner.getId() == i) {
-            System.out.println("Vous avec gagné avec " + winner.getScore() + " points contre " + looser.getScore());
-        } else {
-            System.out.println("Vous avec perdu avec " + looser.getScore() + " points contre " + winner.getScore());
+        if(winner.getId()==1){
+            System.out.println("Vous avec gagné avec "+winner.getScore()+" points contre "+looser.getScore());
+        }else{
+            System.out.println("Vous avec perdu avec "+looser.getScore()+" points contre "+winner.getScore());
         }
+
 
     }
 
@@ -127,9 +109,7 @@ public class Game implements Serializable {
      * Used by the AI.
      */
     public void undo() {
-        // System.out.println(rounds.size());
         Round lastRound = rounds.get(rounds.size() - 1);
-        // System.out.println(lastRound.getPli().size());
 
         Round.Coup c;
         if (lastRound.getPli().size() == 2) {
@@ -168,24 +148,12 @@ public class Game implements Serializable {
      */
     public void next(Carte carte, Round round) {
         if (round.getPli().size() == 2) {
-            // System.out.println("*********************************************************");
             Round nextRound = new Round(players, currentPlayer, this);
             addRound(nextRound);
-            // System.out.println(currentPlayer);
-            // Carte.printCards(carte);
             nextRound.actionProceed(currentPlayer, carte);
         } else if (round.getPli().size() == 1) {
-            // System.out.println(currentPlayer);
-            // Carte.printCards(carte);
             round.actionProceed(currentPlayer, carte);
         } else if (round.getPli().size() == 0) { // ne sert qu'au tout début
-            // System.out.println("#####################################");
-
-            // System.out.println("------------------------------------------");
-            // Carte.printCards(currentPlayer.getKnownCards());
-            // System.out.println("------------------------------------------");
-            // System.out.println(currentPlayer);
-            // Carte.printCards(carte);
             round.actionProceed(currentPlayer, carte);
         } else {
             throw new IllegalArgumentException();
@@ -299,7 +267,13 @@ public class Game implements Serializable {
         throw new IllegalArgumentException();
     }
 
-    /**
+    public void setBot(CFR bot) {
+        this.bot = bot;
+    }
+    public CFR getBot() {
+        return bot;
+    }
+     /**
      * WTF
      * 
      * @param player ({@link Player})
@@ -353,5 +327,48 @@ public class Game implements Serializable {
         infoset.setTable(currentPlayer.getTable());
         return infoset;
     }
+
+
+    public void printGameState(){
+        List<Carte> cartes;
+        for(int i=0;i<players.size();i++){
+            cartes = new ArrayList<>();
+            String name = "(toi)";
+            if(i==1)name = "(IA)";
+            System.out.println("------------PLAYER "+players.get(i).getId()+name+"------------");
+            System.out.println("Hand                      Table     Secret");
+            for(int j=0;j<Player.HAND_SIZE;j++){
+                if(players.get(i).getHand().size()>j){
+                    cartes.add(players.get(i).getHand().get(j));
+                }else{
+                    cartes.add(null);
+                }
+            }
+            for(int j=0;j<Player.TABLE_SIZE;j++){
+                if(players.get(i).getTable().size()>j){
+                    cartes.add(players.get(i).getTable().get(j));
+                }else{
+                    cartes.add(null);
+                }
+            }
+            for(int j=0;j<Player.TABLE_SIZE;j++){
+                if(players.get(i).getSecret().size()>j){
+                    cartes.add(players.get(i).getSecret().get(j));
+                }else{
+                    cartes.add(null);
+                }
+            }
+            if(players.get(i).getId()==1){
+                Carte.printCards(cartes);
+            }else{
+                Carte.printEnemyCards(cartes);
+            }
+        }
+        
+
+    }
+
+    
+
 
 }

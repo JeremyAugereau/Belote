@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,13 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 import fr.insa.IA.Cartes.Carte;
-import fr.insa.IA.Cartes.Couleur;
-import fr.insa.IA.Cartes.Hauteur;
 import fr.insa.IA.Game.Game;
 import fr.insa.IA.Game.Round;
 import fr.insa.IA.Player.Player;
 
-public class CFR {
+public class CFR implements Serializable{
     private HashMap<InfoSet, Noeud> hashMap;
 
     public CFR() {
@@ -29,46 +28,22 @@ public class CFR {
 
     public double training(int n) {
         double value = 0.0;
-        int pourcent=0;
+        int pourcent=0;       
+        String msg ="";   
         for (int i = 1; i <= n; i++) {
-            // System.out.print(".......................................................................");
-            
             Player.resetNbPlayer();
             Game game = new Game(2);
-
-
             if(i*100/n > pourcent){
-                System.out.println(pourcent+1+"%");
-                pourcent = i*100/n;
+                msg = "|"+"=".repeat(pourcent/2+1)+" ".repeat((100-pourcent)/2-1)+"|\r";               
+                pourcent = i*100/n+1;
+                System.out.print(msg);
             }
-
-            // game.getPlayerById(1).setHand(0, new Carte(Hauteur.VALET, Couleur.PIQUE));
-            // game.getPlayerById(1).setHand(1, new Carte(Hauteur.DAME, Couleur.CARREAU));
-            // game.getPlayerById(1).setTable(0, new Carte(Hauteur.AS, Couleur.PIQUE));
-            // game.getPlayerById(1).setSecret(0, new Carte(Hauteur.ROI, Couleur.PIQUE));
-
-            // game.getPlayerById(2).setHand(0, new Carte(Hauteur.AS, Couleur.CARREAU));
-            // game.getPlayerById(2).setHand(1, new Carte(Hauteur.ROI, Couleur.CARREAU));
-            // game.getPlayerById(2).setTable(0, new Carte(Hauteur.DAME, Couleur.PIQUE));
-            // game.getPlayerById(2).setSecret(0, new Carte(Hauteur.VALET, Couleur.CARREAU));
-
-            // for (Player p : game.getPlayers()) {
-            //     System.out.println(p);
-            //     Carte.printCards(p.getHand());
-            //     Carte.printCards(p.getTable());
-            //     Carte.printCards(p.getSecret());
-            // }
             value += cfr(game, 1, 1.0, 1.0);
         }
-        
-        // for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
-        //     if(entry.getKey().getHistory().size()==0){
-        //         System.out.println(entry.getKey().toString() + entry.getValue().toString());
-        //     }
-        // }
+        System.out.println("");
         System.out.println("Taille de la Map : "+hashMap.size());
-        // sauvegardeEnClair(String.valueOf(n));
         sauvegarde(String.valueOf(n));
+        System.out.println("HashMap sauvegardée");
         return value / n;
     }
 
@@ -89,6 +64,7 @@ public class CFR {
 
     public void importMap(String path) throws IOException{
         try {
+            System.out.println("Chargement de la HashMap ...");
             FileInputStream file = new FileInputStream(path);
             ObjectInputStream input= new ObjectInputStream(file);
   
@@ -104,13 +80,8 @@ public class CFR {
         }
   
         System.out.println("HashMap chargée");
-
-        for(Map.Entry<InfoSet, Noeud> entry : hashMap.entrySet()){
-            if(entry.getKey().getHistory().size()==0){
-                System.out.println(entry.getKey().toString() + entry.getValue().toString());
-            }
-        }
     }
+
     // non utilisée mais peut etre pratique pour observer ce qu'il y a dans la map
     private void sauvegardeEnClair(String name) {
         String outputFilePath= "modele_"+name+".txt";
@@ -174,7 +145,6 @@ public class CFR {
     public double cfr(Game game, int idPlayer, double pi, double po) {
 
         if (game.isOver()){
-            // System.out.println(game.payoff(game.getPlayerById(idPlayer)));
             return game.payoff(game.getPlayerById(idPlayer));
         }
             
@@ -188,24 +158,17 @@ public class CFR {
         if (hashMap.containsKey(game.getGameInfoSet())) {
             noeud = hashMap.get(game.getGameInfoSet());
         } else {
-            noeud = new Noeud(game,numAction);
+            noeud = new Noeud(numAction);
             hashMap.put(game.getGameInfoSet(), noeud);
         }
         List<Double> strategy = getStrategy(noeud.getSumRegret());
         List<Double> utils = new ArrayList<>(Collections.nCopies(numAction, 0.0));
         double node_util = 0.0;
-        // System.out.println("------------------------------------------");
-        // Carte.printCards(actions);
-        // System.out.println("------------------------------------------");
 
         for (Carte carte : actions) {
 
             int a = actions.indexOf(carte);
             game.next(carte, round);
-            // System.out.println("------------------------------------------");
-            // System.out.println(a);
-            // System.out.println(actions.contains(carte));
-            // System.out.println("------------------------------------------");
             double res;
             int nextId = game.getCurrentPlayer().getId(); // deja update ds next
             if (idPlayer == nextId) {
@@ -222,14 +185,6 @@ public class CFR {
                 }
             }
             utils.set(a, res);
-
-            // if (idPlayer == 1) {
-            // double res = utils.get(a) - cfr(game, 2, pi * strategy.get(a), po, cpRound);
-            // utils.set(a, res);
-            // } else {
-            // double res = utils.get(a) - cfr(game, 1, pi, strategy.get(a) * po, cpRound);
-            // utils.set(a, res);
-            // }
 
             game.undo();
             node_util += strategy.get(a) * utils.get(a);
@@ -249,5 +204,26 @@ public class CFR {
             updateStrategySum(noeud, strategy, po);
         }
         return node_util;
+    }
+
+    public Carte chooseAction(Game game) {
+        InfoSet info = game.getGameInfoSet();
+        if(hashMap.containsKey(info)){
+            double sum = 0.0;
+            List<Double> list =hashMap.get(info).getSumStrategy();
+            for(Double d : list){
+                sum += d;
+            }
+            double random = Math.random() * sum;
+            double sommeCumul =0.0;
+            for(int i =0;i<list.size();i++){
+                sommeCumul += list.get(i);
+                if(random<=sommeCumul) return game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).get(i);
+            }
+            return game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).get(list.size()-1);                           //ça devrait jamais arriver mais au cas ou;
+        }else{
+            int random = (int) Math.random() * game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).size(); 
+            return game.getCurrentRound().getPlayableCard(game.getCurrentPlayer()).get(random);
+        }
     }
 }
