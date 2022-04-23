@@ -7,11 +7,31 @@ import java.util.List;
 
 import fr.insa.IA.Player.Player;
 
-public class Deck implements Serializable{
+/**
+ * A Deck of our simplified Belote. At it uses a 8-cards deck : 2 colors, from Jack to As.
+ * 
+ * @author AUGEREAU Jeremy
+ * @author GRAC Guilhem
+ */
+public class Deck implements Serializable {
 
+    /**
+     * List of cards compsing the deck.
+     * 
+     * @see Carte
+     */
     private List<Carte> deck;
+    /**
+     * Original size of the deck (before deal).
+     */
     private int deckSize;
 
+    /**
+     * Constructor of Deck. Fill {@link #deck} up with all the cards, and shuffles
+     * it.
+     * 
+     * @see Carte
+     */
     public Deck() {
         deckSize = 0;
         deck = new ArrayList<>();
@@ -25,23 +45,28 @@ public class Deck implements Serializable{
     }
 
     /**
-     * Mélange le deck
+     * Shuffles the deck.
      */
     public void shuffleDeck() {
         Collections.shuffle(deck);
     }
 
     /**
-     * @return le deck avec une ArrayList<Carte>
+     * Getter of the {@link #deck}.
+     * 
+     * @return List of cards composing the deck
+     * @see Carte
      */
     public List<Carte> getDeck() {
         return deck;
     }
 
     /**
-     * retourne la première carte du deck et la supprime du deck
+     * Removes the first card of the deck.
      * 
-     * @return une Carte
+     * @return the card removed
+     * @see Carte
+     * @throws IndexOutOfBoundsException if the deck is empty
      */
     public Carte pop() {
         if (deck.isEmpty()) {
@@ -53,10 +78,11 @@ public class Deck implements Serializable{
     }
 
     /**
-     * Distribue à chaque joueur le bon nombre de carte (défini dans les statics de
-     * la classe Player)
+     * Deals the cards of the deck among players.
      * 
-     * @param players la liste des joueurs
+     * @param players (List of {@link Player}) the players to receive the cards
+     * @see #pop()
+     * @see Player
      */
     public void deal(List<Player> players) {
         for (Player p : players) {
@@ -66,12 +92,17 @@ public class Deck implements Serializable{
             for (int i = 0; i < Player.TABLE_SIZE; i++) {
                 p.addTable(this.pop());
             }
-            for (int i = 0; i < Player.SECRET_SIZE; i++) {
+            for (int i = 0; i < Player.TABLE_SIZE; i++) {
                 p.addSecret(this.pop());
             }
         }
     }
 
+    /**
+     * Getter of {@link #deckSize}, the original size of the deck (before deal).
+     * 
+     * @return (int)
+     */
     public int getDeckSize() {
         return deckSize;
     }
