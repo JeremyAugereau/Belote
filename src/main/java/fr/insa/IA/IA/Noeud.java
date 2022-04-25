@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Node for our simplified Belote.
+ * 
+ * @see CFR
+ * @author AUGEREAU Jeremy
+ * @author GRAC Guilhem
+ */
 public class Noeud implements Serializable{
 
     private List<Double> sumRegret;

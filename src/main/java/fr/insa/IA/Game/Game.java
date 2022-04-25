@@ -321,7 +321,6 @@ public class Game implements Serializable {
      * card in his table, ...
      * 
      * @return ({@link InfoSet}) containing all the information
-     * @see InfoSet
      */
     public InfoSet getGameInfoSet() {
         InfoSet infoset = new InfoSet();
@@ -348,6 +347,9 @@ public class Game implements Serializable {
         return infoset;
     }
 
+    /**
+     * UI to help the human player.
+     */
     public void printGameState() {
         List<Carte> cartes;
         for (int i = 0; i < players.size(); i++) {
