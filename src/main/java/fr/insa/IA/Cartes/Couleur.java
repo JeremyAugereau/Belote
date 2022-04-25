@@ -1,11 +1,24 @@
 package fr.insa.IA.Cartes;
 
+/**
+ * Describe the suit of a card
+ * 
+ * @see Carte
+ * @author AUGEREAU Jeremy
+ * @author GRAC Guilhem
+ */
 public enum Couleur {
+    /**
+     * Diamond
+     */
     CARREAU,
+    /**
+     * Spade
+     */
     PIQUE;
 
     /**
-     * @return retourne le caractère associé à la couleur pour plus d'esthetisme
+     * {@return Return the character or symbol associated to the suit of the card.}
      */
     @Override
     public String toString() {
