@@ -141,6 +141,13 @@ public class CFR implements Serializable {
 
     }
 
+        /**
+     * Return a strategy regarding the List in parameter, by normalizing it or defining it as a uniform tab 
+     * 
+     * @param array     (List<Double>) that will be normalized
+     * @return             (List<Double>) the normalized strategy
+     */
+
     public List<Double> getStrategy(List<Double> array) {
         int n = array.size();
         List<Double> strategy = new ArrayList<>(Collections.nCopies(n, 0.0));
@@ -162,6 +169,14 @@ public class CFR implements Serializable {
         }
         return strategy;
     }
+
+     /**
+     * Make the average between the current node strategy and the strategy in parameter.
+     * 
+     * @param noeud     ({@link Noeud}) the node corresponding to the current game state
+     * @param strategy     (List<Double>) the strategy to be added to this node
+     * @param p     (double) the weight of the strategy corresponding to this node
+     */
 
     public void updateStrategySum(Noeud noeud, List<Double> strategy, double p) {
 
@@ -247,6 +262,12 @@ public class CFR implements Serializable {
         return node_util;
     }
 
+    /**
+     * Allow the bot to choose a card to play by taking in account the game current state.
+     * 
+     * @param game     ({@link Game}) game where the AI is playing
+     * @return (Carte) the card choosen to be played
+     */
     public Carte chooseAction(Game game) {
         InfoSet info = game.getGameInfoSet();
         if (hashMap.containsKey(info)) {

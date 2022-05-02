@@ -17,10 +17,35 @@ import fr.insa.IA.Player.Player;
  * @author GRAC Guilhem
  */
 public class InfoSet implements Serializable {
+    /**
+     * List of cards already played.
+     * 
+     * @see Carte
+     */
     private List<Carte> history;
+    /**
+     * List of cards in the current player hand.
+     * 
+     * @see Carte
+     */
     private List<Carte> hand;
+    /**
+     * List of cards in the current player table.
+     * 
+     * @see Carte
+     */
     private List<Carte> table;
+    /**
+     * List of cards in the hand of the current player ennemy.
+     * 
+     * @see Carte
+     */
     private List<Carte> enemyTable;
+    /**
+     * Card currently in the fold (can be null).
+     * 
+     * @see Carte
+     */
     private Carte currentCarte;
 
     /**

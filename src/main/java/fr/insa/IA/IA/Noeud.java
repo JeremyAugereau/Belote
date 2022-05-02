@@ -14,8 +14,20 @@ import java.util.List;
  */
 public class Noeud implements Serializable{
 
+    /**
+     * Some of regrets compute on the payoff at the end of each branch.
+     * @see CFR
+     */
     private List<Double> sumRegret;
+    /**
+     * Strategy normalized.
+     * @see CFR
+     */
     private List<Double> strategy;
+    /**
+     * Strategy not normalized.
+     * @see CFR
+     */
     private List<Double> sumStrategy;
 
     public Noeud(int numAction) {
