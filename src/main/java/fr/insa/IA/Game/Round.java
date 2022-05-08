@@ -186,7 +186,9 @@ public class Round implements Serializable {
     }
 
     /**
-     * Ask a human player to play a card, by entering a number into the console, creating a Coup.
+     * Ask a human player to play a card, by entering a number into the console,
+     * creating a Coup.
+     * 
      * @see Coup
      */
     public void actionProceed() {
@@ -218,9 +220,10 @@ public class Round implements Serializable {
 
     /**
      * Makes the bot play a card, creating a Coup.
-     * Used by the bot when is training. 
+     * Used by the bot when is training.
+     * 
      * @param player ({@link Player}) controlled by the bot
-     * @param carte ({@link Carte}) card chosen / played by the bot
+     * @param carte  ({@link Carte}) card chosen / played by the bot
      * @see CFR
      * @see Coup
      */
@@ -240,6 +243,7 @@ public class Round implements Serializable {
 
     /**
      * Finds who the next player who has to play is.
+     * 
      * @return ({@link Player})
      * @see Player
      */
@@ -257,7 +261,9 @@ public class Round implements Serializable {
     }
 
     /**
-     * Finds which cards can be played by a player, according to the current round, and the cards already played by the other players.
+     * Finds which cards can be played by a player, according to the current round,
+     * and the cards already played by the other players.
+     * 
      * @param player ({@link Player})
      * @return (List of cards) the playable cards
      * @see Carte
@@ -267,6 +273,7 @@ public class Round implements Serializable {
         playableCartes = player.getKnownCards();
 
         if (pli.isEmpty() || pli.size() == game.getPlayers().size()) {
+            Carte.sortCartes(playableCartes);
             return playableCartes;
         }
 
@@ -284,12 +291,14 @@ public class Round implements Serializable {
         if (playableCartes.isEmpty()) {
             playableCartes = player.getKnownCards();
         }
+        Carte.sortCartes(playableCartes);
         return playableCartes;
     }
 
     /**
      * Finds which player has won the round.
-     * Compares the cards within {@link #pli} to find the strongest one. 
+     * Compares the cards within {@link #pli} to find the strongest one.
+     * 
      * @return ({@link Player}) the winner
      * @see Player
      * @see Carte
@@ -308,7 +317,9 @@ public class Round implements Serializable {
     }
 
     /**
-     * Computes the total points value of the round, by adding the values of each card
+     * Computes the total points value of the round, by adding the values of each
+     * card
+     * 
      * @return (int) the value
      * @see Carte
      */
@@ -322,6 +333,7 @@ public class Round implements Serializable {
 
     /**
      * Getter of {@link #pli}.
+     * 
      * @return (List of {@link Coup})
      */
     public List<Coup> getPli() {
@@ -330,6 +342,7 @@ public class Round implements Serializable {
 
     /**
      * Removes the specified Coup from {@link #pli}.
+     * 
      * @param c ({@link Coup}) to be removed
      */
     public void removeCoup(Coup c) {

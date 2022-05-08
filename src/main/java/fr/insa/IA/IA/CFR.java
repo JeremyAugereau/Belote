@@ -141,11 +141,12 @@ public class CFR implements Serializable {
 
     }
 
-        /**
-     * Return a strategy regarding the List in parameter, by normalizing it or defining it as a uniform tab 
+    /**
+     * Return a strategy regarding the List in parameter, by normalizing it or
+     * defining it as a uniform tab
      * 
-     * @param array     (List<Double>) that will be normalized
-     * @return             (List<Double>) the normalized strategy
+     * @param array (List<Double>) that will be normalized
+     * @return (List<Double>) the normalized strategy
      */
 
     public List<Double> getStrategy(List<Double> array) {
@@ -170,12 +171,15 @@ public class CFR implements Serializable {
         return strategy;
     }
 
-     /**
-     * Make the average between the current node strategy and the strategy in parameter.
+    /**
+     * Make the average between the current node strategy and the strategy in
+     * parameter.
      * 
-     * @param noeud     ({@link Noeud}) the node corresponding to the current game state
-     * @param strategy     (List<Double>) the strategy to be added to this node
-     * @param p     (double) the weight of the strategy corresponding to this node
+     * @param noeud    ({@link Noeud}) the node corresponding to the current game
+     *                 state
+     * @param strategy (List<Double>) the strategy to be added to this node
+     * @param p        (double) the weight of the strategy corresponding to this
+     *                 node
      */
 
     public void updateStrategySum(Noeud noeud, List<Double> strategy, double p) {
@@ -194,8 +198,8 @@ public class CFR implements Serializable {
      * 
      * @param game     ({@link Game}) game where the AI is playing
      * @param idPlayer (int) id of the player who is about to play
-     * @param pi (double)
-     * @param po (double)
+     * @param pi       (double)
+     * @param po       (double)
      * @return (double) the result of the game
      */
     public double cfr(Game game, int idPlayer, double pi, double po) {
@@ -263,9 +267,10 @@ public class CFR implements Serializable {
     }
 
     /**
-     * Allow the bot to choose a card to play by taking in account the game current state.
+     * Allow the bot to choose a card to play by taking in account the game current
+     * state.
      * 
-     * @param game     ({@link Game}) game where the AI is playing
+     * @param game ({@link Game}) game where the AI is playing
      * @return (Carte) the card choosen to be played
      */
     public Carte chooseAction(Game game) {

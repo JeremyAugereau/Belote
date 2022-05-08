@@ -8,7 +8,7 @@ public class Carte implements Comparable<Carte>, Serializable {
 
     private Hauteur hauteur;
     private Couleur couleur;
-    
+
     /**
      * @param h hauteur de la carte (voir enum HAUTEUR)
      * @param c couleur de la carte (voir enum COULEUR)
@@ -35,10 +35,29 @@ public class Carte implements Comparable<Carte>, Serializable {
      * @return retourne null quoi qu'il arrive
      */
     public String toString() {
-        List<Carte> ens = new ArrayList();
+        List<Carte> ens = new ArrayList<>();
         ens.add(this);
         Carte.printCards(ens);
         return null;
+    }
+
+    /**
+     * Trie une List de {@link Carte} selon la couleur et la hauteur. Nécessaire
+     * pour l'IA d'avoir toujours une main triée. Tri en place.
+     * 
+     * @param cartes Liste à trier
+     */
+    public static void sortCartes(List<Carte> cartes) {
+        cartes.sort((Carte c1, Carte c2) -> {
+            if (c1.getCouleur() == c2.getCouleur())
+                return c1.compareTo(c2);
+            if (c1.getCouleur() == Couleur.CARREAU)
+                return 1;
+            if (c1.getCouleur() == Couleur.PIQUE)
+                return -1;
+            else
+                throw new RuntimeException("Couleur non supportée.");
+        });
     }
 
     @Override
@@ -99,8 +118,7 @@ public class Carte implements Comparable<Carte>, Serializable {
                 lignes.set(8, lignes.get(8) + "└─────────┘");
             }
         }
-        for (
-        String s : lignes)
+        for (String s : lignes)
             System.out.println(s);
     }
 
@@ -141,8 +159,7 @@ public class Carte implements Comparable<Carte>, Serializable {
                 lignes.set(8, lignes.get(8) + "└─────────┘");
             }
         }
-        for (
-        String s : lignes)
+        for (String s : lignes)
             System.out.println(s);
     }
 
@@ -159,7 +176,4 @@ public class Carte implements Comparable<Carte>, Serializable {
     public Couleur getCouleur() {
         return this.couleur;
     }
-
-
-
 }
