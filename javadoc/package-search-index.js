@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.insa.IA"},{"l":"fr.insa.IA.Cartes"},{"l":"fr.insa.IA.Game"},{"l":"fr.insa.IA.IA"},{"l":"fr.insa.IA.Player"}];updateSearchResults();

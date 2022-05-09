@@ -4,6 +4,12 @@ import java.io.IOException;
 import fr.insa.IA.Game.Game;
 import fr.insa.IA.IA.CFR;
 
+/**
+ * App is our main.
+ *
+ * @author AUGEREAU Jeremy
+ * @author GRAC Guilhem
+ */
 public class App {
 
     public static void main(String[] args) {
