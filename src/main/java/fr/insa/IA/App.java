@@ -22,7 +22,7 @@ public class App {
             String algo = args[0].toUpperCase();
             int nbIteration = Integer.parseInt(args[1]);
             try {
-                bot.importMap("modele_serialized_" + algo + nbIteration + ".ser");
+                bot.importMap("modele_serialized_" + algo + "_" + nbIteration + ".ser");
             } catch (IOException e) {
                 System.out.println("Fichier introuvale, training du bot ...");
                 switch (algo) {

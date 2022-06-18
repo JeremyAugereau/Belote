@@ -96,7 +96,7 @@ public class CFR implements Serializable {
      */
     private void saveMap(String algo, int nbIteration) {
         try {
-            FileOutputStream file = new FileOutputStream("modele_serialized_" + algo + nbIteration + ".ser");
+            FileOutputStream file = new FileOutputStream("modele_serialized_" + algo + "_" + nbIteration + ".ser");
 
             ObjectOutputStream output = new ObjectOutputStream(file);
 
@@ -173,7 +173,6 @@ public class CFR implements Serializable {
      * @param array (List<Double>) that will be normalized
      * @return (List<Double>) the normalized strategy
      */
-
     public List<Double> getStrategy(List<Double> array) {
         int n = array.size();
         List<Double> strategy = new ArrayList<>(Collections.nCopies(n, 0.0));
@@ -206,7 +205,6 @@ public class CFR implements Serializable {
      * @param p        (double) the weight of the strategy corresponding to this
      *                 node
      */
-
     public void updateStrategySum(Noeud noeud, List<Double> strategy, double p) {
 
         int n = noeud.getSumStrategy().size();
@@ -297,7 +295,7 @@ public class CFR implements Serializable {
         return find(n, r, strategy, 0, strategy.get(0));
     }
 
-    public int find(final int n, final double r, final List<Double> strategy, int i, double sum) {
+    private int find(final int n, final double r, final List<Double> strategy, int i, double sum) {
         if (i == n - 1)
             return i;
         if (r < sum)
@@ -305,6 +303,13 @@ public class CFR implements Serializable {
         return find(n, r, strategy, i + 1, sum + strategy.get(i));
     }
 
+    /**
+     * MCCFR algoritm
+     * 
+     * @param game     ({@link Game}) game where the AI is playing
+     * @param idPlayer (int) id of the player who is about to play
+     * @return (double) the result of the game
+     */
     public double mccfr(Game game, int idPlayer) {
         if (game.isOver()) {
             return game.payoff((game.getPlayerById(idPlayer)));
