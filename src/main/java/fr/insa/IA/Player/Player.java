@@ -99,7 +99,7 @@ public class Player implements Serializable {
      * 
      * @return (int)
      */
-    public int getNbPlayer() {
+    public static int getNbPlayer() {
         return nbPlayer;
     }
 

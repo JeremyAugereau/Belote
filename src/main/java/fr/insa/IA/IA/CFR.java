@@ -43,7 +43,7 @@ public class CFR implements Serializable {
      * @param n (int) number of iterations / games played
      * @return (double) the result of the training
      */
-    public double training(int n) {
+    public double trainingCFR(int n) {
         double value = 0.0;
         int pourcent = 0;
         String msg = "";
@@ -59,9 +59,34 @@ public class CFR implements Serializable {
         }
         System.out.println("");
         System.out.println("Taille de la Map : " + hashMap.size());
-        saveMap(String.valueOf(n));
+        saveMap("CFR", n);
         System.out.println("HashMap sauvegardée");
         return value / n;
+    }
+
+    public double trainingMCCFR(int n) {
+        double value = 0.0;
+        int pourcent = 0;
+        String msg = "";
+        for (int i = 1; i <= n; i++) {
+            for (int idPlayer = 1; idPlayer < 2; idPlayer++) {
+                Player.resetNbPlayer();
+                Game game = new Game(2);
+                if (i * 100 / n > pourcent) {
+                    msg = "|" + "=".repeat(pourcent / 2 + 1) + " ".repeat((100 - pourcent) / 2 - 1) + "|\r";
+                    pourcent = i * 100 / n + 1;
+                    System.out.print(msg);
+                }
+                double v = mccfr(game, idPlayer);
+                if (idPlayer == 0)
+                    value += v;
+            }
+        }
+        System.out.println("");
+        System.out.println("Taille de la Map : " + hashMap.size());
+        saveMap("MCCFR", n);
+        System.out.println("HashMap sauvegardée");
+        return value / (double) n;
     }
 
     /**
@@ -69,9 +94,9 @@ public class CFR implements Serializable {
      * 
      * @param name (String) name of the file
      */
-    private void saveMap(String name) {
+    private void saveMap(String algo, int nbIteration) {
         try {
-            FileOutputStream file = new FileOutputStream("modele_serialized_" + name + ".ser");
+            FileOutputStream file = new FileOutputStream("modele_serialized_" + algo + nbIteration + ".ser");
 
             ObjectOutputStream output = new ObjectOutputStream(file);
 
@@ -264,6 +289,70 @@ public class CFR implements Serializable {
             updateStrategySum(noeud, strategy, po);
         }
         return node_util;
+    }
+
+    public int distribution(List<Double> strategy) {
+        int n = strategy.size();
+        double r = Math.random();
+        return find(n, r, strategy, 0, strategy.get(0));
+    }
+
+    public int find(final int n, final double r, final List<Double> strategy, int i, double sum) {
+        if (i == n - 1)
+            return i;
+        if (r < sum)
+            return i;
+        return find(n, r, strategy, i + 1, sum + strategy.get(i));
+    }
+
+    public double mccfr(Game game, int idPlayer) {
+        if (game.isOver()) {
+            return game.payoff((game.getPlayerById(idPlayer)));
+        }
+
+        if (game.getRounds().size() == 0) { // IL NE FAUT JAMAIS QUE rounds SOIT VIDE
+            game.addRound(new Round(game));
+        }
+        Round round = game.getCurrentRound();
+        List<Carte> actions = round.getPlayableCard(game.getPlayerById(idPlayer));
+        int numAction = actions.size();
+        Noeud noeud;
+        if (hashMap.containsKey(game.getGameInfoSet())) {
+            noeud = hashMap.get(game.getGameInfoSet());
+        } else {
+            noeud = new Noeud(numAction);
+            hashMap.put(game.getGameInfoSet(), noeud);
+        }
+        List<Double> strategy = getStrategy(noeud.getSumRegret());
+
+        if (idPlayer != game.getCurrentPlayer().getId()) {
+            int a = distribution(strategy);
+            Carte carte = actions.get(a);
+            game.next(carte, round);
+
+            double util = mccfr(game, idPlayer);
+            game.undo();
+            updateStrategySum(noeud, strategy, 1);
+            return util;
+        } else {
+            List<Double> utils = new ArrayList<>(Collections.nCopies(numAction, 0.0));
+            double node_util = 0.0;
+
+            for (Carte carte : actions) {
+                int a = actions.indexOf(carte);
+                game.next(carte, round);
+                int nextId = game.getCurrentPlayer().getId(); // deja update ds next
+                utils.set(a, mccfr(game, nextId));
+                game.undo();
+                node_util += strategy.get(a) * utils.get(a);
+            }
+            for (Carte carte : actions) {
+                int a = actions.indexOf(carte);
+                double regret = utils.get(a) - node_util;
+                noeud.setSumregret(a, noeud.getSumRegret().get(a) + regret);
+            }
+            return node_util;
+        }
     }
 
     /**
