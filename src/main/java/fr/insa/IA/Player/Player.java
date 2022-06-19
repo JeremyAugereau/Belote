@@ -20,7 +20,7 @@ public class Player implements Serializable {
     /**
      * Number of cards the player's table can hold.
      */
-    public final static int TABLE_SIZE = 1;
+    public final static int TABLE_SIZE = 2;
     /**
      * Number of players in a game.
      * 

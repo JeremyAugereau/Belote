@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.insa.IA.Player.Player;
+
 public class Carte implements Comparable<Carte>, Serializable {
 
     private Hauteur hauteur;
@@ -96,7 +98,7 @@ public class Carte implements Comparable<Carte>, Serializable {
                 lignes.set(6, lignes.get(6) + "           ");
                 lignes.set(7, lignes.get(7) + "           ");
                 lignes.set(8, lignes.get(8) + "           ");
-            } else if (cartes.indexOf(carte) < 3) {
+            } else if (cartes.indexOf(carte) < Player.HAND_SIZE + Player.TABLE_SIZE) {
                 lignes.set(0, lignes.get(0) + "┌─────────┐");
                 lignes.set(1, lignes.get(1) + "│" + carte.hauteur.toString() + "        │");
                 lignes.set(2, lignes.get(2) + "│         │");
@@ -137,7 +139,7 @@ public class Carte implements Comparable<Carte>, Serializable {
                 lignes.set(6, lignes.get(6) + "           ");
                 lignes.set(7, lignes.get(7) + "           ");
                 lignes.set(8, lignes.get(8) + "           ");
-            } else if (cartes.indexOf(carte) == 2) {
+            } else if (cartes.indexOf(carte) >= Player.HAND_SIZE && cartes.indexOf(carte) < Player.HAND_SIZE + Player.TABLE_SIZE) {
                 lignes.set(0, lignes.get(0) + "┌─────────┐");
                 lignes.set(1, lignes.get(1) + "│" + carte.hauteur.toString() + "        │");
                 lignes.set(2, lignes.get(2) + "│         │");

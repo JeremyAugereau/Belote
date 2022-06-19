@@ -39,7 +39,7 @@ public class App {
 
             }
 
-            if (args[1].equals("p2")) {
+            if (args[2].equals("p2")) {
                 game.setCurrentPlayer(game.getPlayerById(2));
             }
             game.proceedGame();

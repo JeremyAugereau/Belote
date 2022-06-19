@@ -358,7 +358,7 @@ public class Game implements Serializable {
             if (i == 1)
                 name = "(IA)";
             System.out.println("------------PLAYER " + players.get(i).getId() + name + "------------");
-            System.out.println("Hand                      Table     Secret");
+            System.out.println("Hand                  Table                 Secret");
             for (int j = 0; j < Player.HAND_SIZE; j++) {
                 if (players.get(i).getHand().size() > j) {
                     cartes.add(players.get(i).getHand().get(j));

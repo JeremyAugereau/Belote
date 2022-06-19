@@ -89,7 +89,7 @@ public class CFR implements Serializable {
                     System.out.print(msg);
                 }
                 double v = mccfr(game, idPlayer);
-                if (idPlayer == 0)
+                if (idPlayer == 1)
                     value += v;
             }
         }

@@ -13,6 +13,10 @@ public enum Hauteur {
      */
     AS,
     /**
+     * Ten
+     */
+    DIX,
+    /**
      * King
      */
     ROI,
@@ -23,7 +27,11 @@ public enum Hauteur {
     /**
      * Jack
      */
-    VALET;
+    VALET,
+    /**
+     * Nine
+     */
+    NEUF;
 
     /**
      * {@return Return the character or symbol associated to the rank of the card.}
@@ -33,31 +41,41 @@ public enum Hauteur {
         switch (this) {
             case AS:
                 return "A";
+            case DIX:
+                return "X";
             case ROI:
                 return "K";
             case DAME:
                 return "Q";
             case VALET:
                 return "J";
+            case NEUF:
+                return "9";
             default:
                 throw new IllegalArgumentException();
         }
     }
 
     /**
-     * Each card as a value used to compute the score of a player, based on its rank.
+     * Each card as a value used to compute the score of a player, based on its
+     * rank.
+     * 
      * @return (int) rank of the card in accordance with its rank
      */
     public int toScore() {
         switch (this) {
             case AS:
                 return 11;
+            case DIX:
+                return 10;
             case ROI:
                 return 4;
             case DAME:
                 return 3;
             case VALET:
                 return 2;
+            case NEUF:
+                return 0;
             default:
                 throw new IllegalArgumentException();
         }
