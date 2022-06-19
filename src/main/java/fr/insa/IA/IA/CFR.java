@@ -38,8 +38,9 @@ public class CFR implements Serializable {
 
     /**
      * Train the AI by playing multiple games, and computing statistics to find the
-     * best card to play.
+     * best card to play. Uses the CFR algorithm
      * 
+     * @see {@link #cfr(Game, int, double, double)}
      * @param n (int) number of iterations / games played
      * @return (double) the result of the training
      */
@@ -50,6 +51,7 @@ public class CFR implements Serializable {
         for (int i = 1; i <= n; i++) {
             Player.resetNbPlayer();
             Game game = new Game(2);
+            // Barre de chargement
             if (i * 100 / n > pourcent) {
                 msg = "|" + "=".repeat(pourcent / 2 + 1) + " ".repeat((100 - pourcent) / 2 - 1) + "|\r";
                 pourcent = i * 100 / n + 1;
@@ -64,6 +66,14 @@ public class CFR implements Serializable {
         return value / n;
     }
 
+    /**
+     * Train the AI by playing multiple games, and computing statistics to find the
+     * best card to play. Uses the MCCFR algorithm
+     * 
+     * @see {@link #mccfr(Game, int)}
+     * @param n (int) number of iterations / games played
+     * @return (double) the result of the training
+     */
     public double trainingMCCFR(int n) {
         double value = 0.0;
         int pourcent = 0;
@@ -72,6 +82,7 @@ public class CFR implements Serializable {
             for (int idPlayer = 1; idPlayer < 2; idPlayer++) {
                 Player.resetNbPlayer();
                 Game game = new Game(2);
+                // Barre de chargement
                 if (i * 100 / n > pourcent) {
                     msg = "|" + "=".repeat(pourcent / 2 + 1) + " ".repeat((100 - pourcent) / 2 - 1) + "|\r";
                     pourcent = i * 100 / n + 1;

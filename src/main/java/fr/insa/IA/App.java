@@ -7,7 +7,7 @@ import fr.insa.IA.IA.CFR;
 public class App {
 
     public static void main(String[] args) {
-        // Pour lancer le programme les paramètres sont " nbIteration JoueurSouhaité(p1
+        // Pour lancer le programme les paramètres sont " algo(cfr ou mccfr) nbIteration JoueurSouhaité(p1
         // ou p2)"
 
         Game game = new Game(2);
